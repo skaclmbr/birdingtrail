@@ -15,11 +15,18 @@
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
       <header class="masthead mb-auto">
         <div class="inner">
-          <h3 class="masthead-brand">Cover</h3>
+
+          <h3 class="masthead-brand"><?php bloginfo('name'); ?></h3>
+          <?php wp_nav_menu( array( 
+            'theme_location' => 'header-menu', 
+            'menu_class' => 'nav nav-masthead justify-content-center list-inline' 
+          ) ); ?>
+          <!-- STOCK BOOTSTRAP NAV
           <nav class="nav nav-masthead justify-content-center">
             <a class="nav-link active" href="#">Home</a>
             <a class="nav-link" href="#">Features</a>
             <a class="nav-link" href="#">Contact</a>
           </nav>
+        -->
         </div>
       </header>
