@@ -24,6 +24,20 @@ function bt_register_menu() {
 }
 add_action( 'init', 'bt_register_menu' );
 
+function bt_widgets_init() {
+    register_sidebar( array(
+        'name'          => 'Footer - Copyright Text',
+        'id'            => 'footer-copyright-text',
+        'before_widget' => '<div class="inner footer_copyright_text">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h4>',
+        'after_title'   => '</h4>',
+    ) );
+ 
+}
+add_action( 'widgets_init', 'bt_widgets_init' );
+
+
 //Eventually, here is where we add options for Appearance > Customize
 // see here: https://www.lyrathemes.com/bootstrap-wordpress-theme-tutorial-1/
 // - locate main logo - fix in cover.php
