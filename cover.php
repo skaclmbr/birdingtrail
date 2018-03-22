@@ -11,12 +11,12 @@ get_header(); ?>
 
 
       <main role="main" class="inner cover">
-        <img class="main-logo" src="/wp-content/themes/birdingtrail/img/main_logo.png"/>
-        <h1 class="cover-heading">North Carolina Birding Trail</h1>
-        <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
+        <a href="<?php home_url() ?>"><img class="header_logo" src="/wp-content/themes/birdingtrail/img/header_logo.png"></a>
+
+        <p class="lead">From our vast coastline to our high mountain peaks, North Carolina is home to a diversity of habitats that support hundreds of species of birds and other wildlife. Our unique geographic setting along the Atlantic coast flyway provides both breeding and wintering grounds for many birds, making North Carolina a premiere birding destination.</p>
         <p class="lead">
-          <a href="#" class="btn btn-lg btn-secondary">Learn more</a>
+          <a href="/sites" class="btn btn-lg btn-secondary">Explore the Sites</a>
         </p>
-      </main>
+        </main>
 
 <?php get_footer(); ?>
