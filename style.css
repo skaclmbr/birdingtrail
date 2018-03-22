@@ -12,8 +12,6 @@ License URI: http://creativecommons.org/licenses/by-sa/3.0/
 
 This simple theme was built using the example Bootstrap theme "Basic marketing site" found on the Bootstrap web site http://twitter.github.com/bootstrap/examples/hero.html
 
-@import ('bootstrap/css/bootstrap.css');
-@import ('bootstrap/css/bootstrap-responsive.css');
 */
 
 
@@ -42,6 +40,8 @@ a:hover {
 
 /*
  * Base structure
+	reference: iPhone SE 320X568; - minimum dimensions?
+
  */
 
 html,
@@ -63,24 +63,41 @@ body {
 }
 
 .cover-container {
-  max-width: 42em;
+  padding: 0 1 0 1rem;
 }
 
 .main-logo {
-	width:80%;
+	width:90%;
 }
 
 /*
  * Header
+ *	added wp css tags to bootstrap nav links (.menu-item tags) - dunno if this will mess with other menus though!
  */
-.masthead {
-  margin-bottom: 2rem;
+
+/* temporarily hide header logo */
+img .header_logo {
+  display:none;
 }
+
+.masthead {
+  margin-bottom: 1.5rem !important;
+  max-width:100%;
+}
+
+.inner {
+  padding-left:1.5rem;
+  padding-right:1.5rem;
+}
+
 
 .masthead-brand {
   margin-bottom: 0;
 }
 
+.menu-item a:hover {
+	text-decoration:none;
+}
 .menu-item,
 .nav-masthead .nav-link {
   padding: .25rem 0;
@@ -112,6 +129,7 @@ body {
   .masthead-brand {
     float: left;
   }
+  .menu-item,
   .nav-masthead {
     float: right;
   }
@@ -121,9 +139,7 @@ body {
 /*
  * Cover
  */
-.inner {
-  text-align:center;
-}
+
 .cover {
   padding: 0 1.5rem;
 }
@@ -133,11 +149,104 @@ body {
   font-weight: 700;
 }
 
+.inner {
+  text-align:center;
+}
+/*
+ * Map
+ */
+ 
+/* controls map to be 80% width */
+.map-body {
+  width:100%;
+  height:100%;
+  top:0rem;
+  right:0rem;
+  bottom:0rem;
+  left:0rem;
+  display:block;
+ }
+#map_canvas {
+	width: 100%;
+	min-height: 45rem;
+}
 
+.map .inner{
+	padding:0rem;
+	height:inherit;
+}
+.map {
+  min-width:100%;
+  padding: 0 0rem;
+}
+
+/* controls site detail popup background color */
+.modal-content {
+  background:#333;
+}
+
+/* controls x color on site detail popup */
+button.close:hover {
+	color:#ddd;
+}
+
+button.close {
+	color:white;
+}
+
+#map-location {
+	font-size:1.25rem;
+	cursor: pointer;
+}
+
+#map-location-container{
+	display:float-right;
+}
+#button-container {
+	width:inherit;
+	margin-right:0rem;
+	margin-left:0rem;
+}
+.foreground-fa {
+	color: #517098;
+}
+
+/* controls card color */
+.card {
+	background: #365c8b;
+}
+
+/* site label that pops up when point hovered over*/
+.site-popup {
+	border:none;
+	border-radius:5px;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	background:#517098;
+	color:#ffffff;
+	padding:5.5px;
+	color:white;
+	line-height:1.1em;
+	font-weight:300;
+	font-variant:small-caps;
+	font-size:1.2em;
+}
 /*
  * Footer
  */
 .mastfoot {
   color: rgba(255, 255, 255, .5);
   text-align:center;
+  line-height:0.8rem;
  }
+
+.mastfoot p{
+	margin-bottom:0rem;
+}
+ .social {
+ 	font-size:1.25rem !important;
+ 	padding:1rem;
+ }
+.copy {
+	font-size:0.8rem;
+}
