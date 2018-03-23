@@ -16,7 +16,7 @@ This simple theme was built using the example Bootstrap theme "Basic marketing s
 
 
 
-/*
+/* =====================================================
  * Globals
  */
 
@@ -38,7 +38,7 @@ a:hover {
 }
 
 
-/*
+/* =====================================================
  * Base structure
 	reference: iPhone SE 320X568; - minimum dimensions?
 
@@ -62,7 +62,7 @@ body {
   box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
 }
 
-.cover-container {
+.bt-container {
   padding: 0 1 0 1rem;
 }
 
@@ -70,7 +70,15 @@ body {
 	width:90%;
 }
 
-/*
+.map-body{
+	width:100%;
+}
+.bt-body {
+	width:100%;
+	padding:1.5rem 0 1.5rem 0;
+}
+
+/* =====================================================
  * Header
  *	added wp css tags to bootstrap nav links (.menu-item tags) - dunno if this will mess with other menus though!
  */
@@ -81,18 +89,26 @@ img .header_logo {
 }
 
 .masthead {
-  margin-bottom: 1.5rem !important;
-  max-width:100%;
-}
-
-.inner {
+  padding-bottom: 0.7rem !important;
+  margin-bottom:0 ;
+  /*max-width:100%;*/
   padding-left:1.5rem;
   padding-right:1.5rem;
 }
 
+/*formatting for header logo*/
+.masthead img {
+  width:auto;
+  float:left;
+}
 
-.masthead-brand {
-  margin-bottom: 0;
+.masthead.inner {
+  padding-left:1.5rem;
+  padding-right:1.5rem;
+	
+}
+.inner {
+  text-align:center;
 }
 
 .menu-item a:hover {
@@ -125,26 +141,41 @@ img .header_logo {
   border-bottom-color: #fff;
 }
 
-@media (min-width: 48em) {
-  .masthead-brand {
-    float: left;
-  }
-  .menu-item,
-  .nav-masthead {
-    float: right;
-  }
+/* logo  or text on front page*/
+.masthead-brand {
+	float:left;
 }
 
+/*contains menu items */
+.menu-main-container {
+	display:inline;
+	float:right;
+}
 
-/*
- * Cover
+/*note: on the map page, trigger map dimensions when width reaches this threshold */
+@media (max-width:450px){ 
+	.masthead-brand {
+		text-align:center;
+		float:none; /* needed for front-page */
+	}
+	
+	.menu-main-container {
+		width:100%;
+	}
+	.masthead img {
+		float:none;
+	}
+}
+
+/* =====================================================
+ * Front Page (also called Cover)
  */
 
-.cover {
+.front-page {
   padding: 0 1.5rem;
 }
 
-.cover .btn-lg {
+.front-page .btn-lg {
   padding: .75rem 1.25rem;
   font-weight: 700;
 }
@@ -152,7 +183,7 @@ img .header_logo {
 .inner {
   text-align:center;
 }
-/*
+/* =====================================================
  * Map
  */
  
@@ -168,15 +199,12 @@ img .header_logo {
  }
 #map_canvas {
 	width: 100%;
-	min-height: 45rem;
 }
 
-.map .inner{
+.map {
 	padding:0rem;
 	height:inherit;
-}
-.map {
-  min-width:100%;
+  width:100%;
   padding: 0 0rem;
 }
 
@@ -231,6 +259,9 @@ button.close {
 	font-variant:small-caps;
 	font-size:1.2em;
 }
+
+
+
 /*
  * Footer
  */
