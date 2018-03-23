@@ -38,28 +38,6 @@ function wpbootstrap_scripts_with_jquery()
 }
 add_action( 'wp_enqueue_scripts', 'wpbootstrap_scripts_with_jquery' );
 
-function btstarter_wp_setup() {
-	add_theme_support( 'title-tag' );
-}
-add_action( 'after_setup_theme', 'btstarter_wp_setup' );
-
-function bt_register_menu() {
-	register_nav_menu('header-menu', __( 'Header Menu'));
-}
-add_action( 'init', 'bt_register_menu' );
-
-function bt_widgets_init() {
-    register_sidebar( array(
-        'name'          => 'Footer - Copyright Text',
-        'id'            => 'footer-copyright-text',
-        'before_widget' => '<div class="inner footer_copyright_text">',
-        'after_widget'  => '</div>',
-        'before_title'  => '<h4>',
-        'after_title'   => '</h4>',
-    ) );
- 
-}
-add_action( 'widgets_init', 'bt_widgets_init' );
 
 
 //==============================================================================
@@ -163,6 +141,48 @@ function get_ncbt_data() {
 	}
 }
 // ======================================================================================
+// add customization for theme
+
+
+function btstarter_wp_setup() {
+
+	add_theme_support( 'title-tag' );
+
+	add_theme_support('custom-logo', array(
+	    'height'      => 100,
+	    'width'       => 400,
+	    'flex-height' => true,
+	    'flex-width'  => true,
+	    'header-text' => array( 'site-title', 'site-description' ),
+	));
+
+	add_theme_support( 'automatic-feed-links' );
+}
+add_action( 'after_setup_theme', 'btstarter_wp_setup' );
+
+
+
+//register functionality for custom menus
+function bt_register_menu() {
+	register_nav_menu('header-menu', __( 'Header Menu'));
+}
+add_action( 'init', 'bt_register_menu' );
+
+function bt_widgets_init() {
+    register_sidebar( array(
+        'name'          => 'Footer - Copyright Text',
+        'id'            => 'footer-copyright-text',
+        'before_widget' => '<div class="inner footer_copyright_text">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h4>',
+        'after_title'   => '</h4>',
+    ) );
+ 
+}
+add_action( 'widgets_init', 'bt_widgets_init' );
+
+
+// ======================================================================================
 // adds appropriate css classes to the map page css
 
 /* REQUIRED FOR MAP TO BE FULL WIDTH */
@@ -172,6 +192,8 @@ function my_body_classes( $classes ) {
 
 	if ( is_page_template( 'map.php')) {
 		$classes[] = 'map-body';
+	} else {
+		$classes[] = 'bt-body';
 	}
 	return $classes;
 }
