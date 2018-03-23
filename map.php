@@ -31,6 +31,12 @@
 
 get_header(); ?>
 
+<!-- 
+	content for popup box and map container
+	resizes google map container based on viewport size and header, footer heights
+		- see code in initialize below,  
+
+-->
 <main role="main" class="inner map">
   <!-- The Modal -->
   <div class="modal fade" id="infoPanel">
@@ -71,24 +77,24 @@ get_header(); ?>
           <div id="TRAVELINFO"></div>
           <div><a id="NAVIGATION" taget="_blank"></a></div>
         </div>
-        </div>
-        </div>
       </div>
+    </div>
+   </div>
 
 
-      	<div id="map-container">
-      		<!--bootstrap grid -->
-      		<!-- this needs more work - figure out how to includ other buttons, mobile experience not great 
-      		<div id="button-container"  class="container-fluid">
-      			<span class="fa fa-stack" id="map-location">
-			     <i class="fa fa-square fa-stack-2x background-fa "></i>
-			     <i class="fa fa-location-arrow fa-stack-1x foreground-fa"></i>
-			    </span>
-      		</div>
-      		-->
-      		<!--google map canvas -->
-	      	<div id="map_canvas"></div>
-   		</div>
+	<div id="map-container">
+		<!--bootstrap grid -->
+		<!-- this needs more work - figure out how to includ other buttons, mobile experience not great 
+		<div id="button-container"  class="container-fluid">
+			<span class="fa fa-stack" id="map-location">
+	     <i class="fa fa-square fa-stack-2x background-fa "></i>
+	     <i class="fa fa-location-arrow fa-stack-1x foreground-fa"></i>
+	    </span>
+		</div>
+		-->
+		<!--google map canvas -->
+  		<div id="map_canvas"></div>
+	</div>
 </main>
       
   
@@ -181,14 +187,34 @@ get_header(); ?>
 		  });
 		};
 	};
-	tryGeolocation();	
+
+	// ===================================================================
+	// add listener to resize google maps when browser resized
+
+	//set map height function
+	function setMapHeight() {
+
+	 //determine header, footer heights
+	 fhHeight = parseInt(jQuery(".masthead").css("height")) + parseInt(jQuery(".mastfoot").css("height"));
+	 bHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0); //maximum dimensions for window
+
+	 jQuery("#map_canvas").css("height",bHeight - fhHeight-1); //set map canvas to new dimensions (window - footer + header)
+
+	};
 
 	jQuery(document).ready(function(){
 		
+		//attempt to get geolocation from browser window
+		tryGeolocation();	
+
+		
+		// ================================================================
+		// load listeners
 		//listen for location button click
-		jQuery("#map-location").click(function(){
-			tryGeolocation(false);
-		});
+		jQuery("#map-location").click(function(){tryGeolocation(false);});
+
+		//add listener to change map size when window changes
+		google.maps.event.addDomListener(window, "resize", function() {setMapHeight();});
 
 		//listen for modal panel close
 		//make sure to clear out fields
@@ -198,33 +224,29 @@ get_header(); ?>
 		});
 		*/
 
-		//jQuery("info_panel").hide();
 		var defaultLatLng = new google.maps.LatLng(35.2,-79.8); // offcenter to allow for panel
 		var defaultZoomLevel = 8;
 
-		//var ncbtMapStyle = [{ featureType: "administrative", stylers: [ { visibility: "on" }, { saturation: -90 }, { lightness: 52 } ] }];
-		
 		var myOptions = {
 	          zoom: defaultZoomLevel,
 	          panControl: false,
 	          streetViewControl: false,
 			  mapTypeId: google.maps.MapTypeId.TERRAIN,
-			  //mapTypeControlOptions: {position: google.maps.ControlPosition.TOP_LEFT},
 			  center: defaultLatLng,
 			  styles: ncbtMapStyle
 			};
 
 		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+		console.log('map initiated');
+
+ 		// run function to set map height on page load
+		setMapHeight();
+
 
 		// ===================================================================
-		// add listener to resize google maps when browser resized
-
-
-		// ===================================================================
-		// map NCBT sites
+		// map Birding Trail sites
 
 		//populateNcbtPoints(); //populate points with static page-map.js data
-
 
 		//setup marker definitions
 		var siteMarkers = {};
@@ -250,6 +272,7 @@ get_header(); ?>
 			anchor: pointOffset
 			};
 
+		//These options govern the look of the labels that appear on the map
 		var infoboxOptions = {
 			boxStyle: {
 			  //opacity:0.9
@@ -258,7 +281,7 @@ get_header(); ?>
 			  ,maxWidth: "150px"
 			 }
 			,disableAutoPan: true
-			,pixelOffset: new google.maps.Size(15,-25)
+			,pixelOffset: new google.maps.Size(12,-25)
 			,closeBoxURL: ""
 			,isHidden: false
 			,pane: "mapPane"
@@ -271,41 +294,40 @@ get_header(); ?>
 		// ==================================================================
 		// add listener to change display upon zoom change - functions in map.js
 		var zoomDisplayLabels = 11;
+		var currZoom = map.getZoom();
 		google.maps.event.addListener(map, 'zoom_changed', function() {
-		    zoomLevel = map.getZoom();
-		    console.log ("zoom level: " + String(zoomLevel));
-		    if (zoomLevel >= zoomDisplayLabels) {
-		    	showLabels(siteInfoWindows);
-		    } else {
-		    	removeLabels(siteInfoWindows);
-		    	//loadMarkers(); //reload event listeners, map markers
-		    	loadListeners(); //reload event listeners, map markers
-		    }
+		    newZoom = map.getZoom();
+		    console.log ("zoom level: " + String(newZoom));
+		    if (newZoom >= zoomDisplayLabels && currZoom<zoomDisplayLabels) { //zoomed in, crossed label zoom threshold
+		    	showLabels(siteInfoWindows); //turn all labels on, remove hover events
+		    } else if (newZoom < zoomDisplayLabels && currZoom >=zoomDisplayLabels ) { //zoomed out, crossed label zoom threshold
+		    	removeLabels(siteInfoWindows); // turn all labels off
+		    	loadListeners(); //reload event listeners (hover to display labels)
+		    } 
+	    	currZoom = newZoom;
 		});
 
 		function showLabels(sIW) {
-		    //loop through passed infowindows array, TURN LABELS ON
+		    //loop through passed infowindows array, TURN ALL LABELS ON, remove event listeners
 		    for (l in sIW) {
 		        siteInfoWindows[ l ].open(map,siteMarkers[ l ]);
 		        google.maps.event.removeListener(siteMouseoutListeners [l]); //remove mouseout event listener (marker highlight, label disappear)
 		        google.maps.event.removeListener(siteMouseoverListeners [l]); //remove mouseover event listener (marker highlight, label)
 		    }
-		}
+		};
 
 		function removeLabels(sIW) {
-		    //loop through passed infowindows array, TURN LABELS OFF
+		    //loop through passed infowindows array, TURN LABELS OFF, add event listeners back
 		    for (l in sIW) {
 		    	siteInfoWindows[ l ].close();
-		    	//siteMarkers[l].setMap(null); //remove old markers
 		    }
-		}
+		};
 
 		<?php
 			
 			//======================================================================
 			//The following is working code that downloads the most recent ncbt data
-			//Currently loading from static js file 20180227_ncbt_points_static.js
-			//FUTURE - move this to a CRON JOB that runs each night and creates static file (if it speeds loading)
+			//POTENTIAL FUTURE - move this to a CRON JOB that runs each night and creates static file (if it speeds loading)
 			//======================================================================
 
 			//include_once('ncbt_connect.php'); //attempt to put login info in another file - not sure this is necessary
@@ -322,11 +344,14 @@ get_header(); ?>
 			   die("console.log('Connection failed');");
 			} else {
 			  echo "console.log('Connected successfully');";
-			}
-			
-			//could wrap mouseover, mouseout event listeners into a function to call later?
+			};
 
-			/*create two functions, one for markers, one for labels and event listeners*/
+
+			/* 
+				create two functions, one for markers, one for labels and event listeners
+				enables refreshing of label events without redrawing all markers upon map zoom
+			*/
+
 			$markers = 'function loadMarkers() {';
 			$listeners = 'function loadListeners() {';
 
@@ -340,32 +365,18 @@ get_header(); ?>
 					$listeners .='iwContent = "<div class=\"site-popup\">' . $row['NAME'] . '</div>";';
 					$listeners .= 'siteInfoWindows["' . $slug . '"] = new InfoBox(infoboxOptions);';
 					$listeners .= 'siteInfoWindows["' . $slug . '"].setContent(iwContent);';
-
-					$markers .= 'siteMarkers["' . $slug . '"] = new google.maps.Marker({position:{lat:' . $row["LAT"] . ', lng:' . $row["LON"] . '},icon:siteIcon,map:map});';
 					$listeners .= 'siteMouseoverListeners["' . $slug . '"] = google.maps.event.addListener(siteMarkers["' . $slug . '"], "mouseover", function() {siteMarkers["' . $slug . '"].setIcon(highlightIcon); siteInfoWindows["' . $slug . '"].open(map,siteMarkers["' . $slug . '"]); });';
 					$listeners .= 'siteMouseoutListeners["' . $slug . '"] = google.maps.event.addListener(siteMarkers["' . $slug . '"], "mouseout", function() {siteMarkers["' . $slug . '"].setIcon(siteIcon); siteInfoWindows["' . $slug . '"].close();});';
 
-					$markers .= 'google.maps.event.addListener(siteMarkers["' . $slug . '"], "click", function() {
-						triggerInfoPanel("'. $slug . '");
-						});';
-					/* WORKING CODE COMMENTED OUT FOR TESTING
-					echo 'iwContent = "<div class=\"site-popup\">' . $row['NAME'] . '</div>";';
-					echo 'siteInfoWindows["' . $slug . '"] = new InfoBox(infoboxOptions);';
-					echo 'siteInfoWindows["' . $slug . '"].setContent(iwContent);';
-
-					echo 'siteMarkers["' . $slug . '"] = new google.maps.Marker({position:{lat:' . $row["LAT"] . ', lng:' . $row["LON"] . '},icon:siteIcon,map:map});';
-					echo 'siteMouseoverListeners["' . $slug . '"] = google.maps.event.addListener(siteMarkers["' . $slug . '"], "mouseover", function() {siteMarkers["' . $slug . '"].setIcon(highlightIcon); siteInfoWindows["' . $slug . '"].open(map,siteMarkers["' . $slug . '"]); });';
-					echo 'siteMouseoutListeners["' . $slug . '"] = google.maps.event.addListener(siteMarkers["' . $slug . '"], "mouseout", function() {siteMarkers["' . $slug . '"].setIcon(siteIcon); siteInfoWindows["' . $slug . '"].close();});';
-
-					echo 'google.maps.event.addListener(siteMarkers["' . $slug . '"], "click", function() {
-						triggerInfoPanel("'. $slug . '");
-						});';
-					*/
+					$markers .= 'siteMarkers["' . $slug . '"] = new google.maps.Marker({position:{lat:' . $row["LAT"] . ', lng:' . $row["LON"] . '},icon:siteIcon,map:map});';
+					$markers .= 'google.maps.event.addListener(siteMarkers["' . $slug . '"], "click", function() {triggerInfoPanel("'. $slug . '");});';
 				}
-				$markers .= 'console.log("loadMarkers run");};'; //close out function
+				//$markers .= 'console.log("loadMarkers run");};'; //close out function
+				$markers .= '};'; //close out function
 				echo $markers;
 
-				$listeners .= 'console.log("loadListeners run");};'; //close out function
+				//$listeners .= 'console.log("loadListeners run");};'; //close out function
+				$listeners .= '};'; //close out function
 				echo $listeners;
 			}
 			
