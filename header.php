@@ -12,17 +12,25 @@
 
   <body <?php body_class(); ?>>
 
-    <div class="cover-container d-flex h-100 mx-auto flex-column">
+    <div class="bt-container d-flex h-100 mx-auto flex-column">
     <!--<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">-->
-      <header class="masthead mb-auto">
-        <div class="inner">
-
-          <a href="../"><h3 class="masthead-brand"><?php bloginfo('name');?></h3></a>
-          <!--<a href="<?php get_bloginfo('url'); ?>"><img class="header_logo" src="/wp-content/themes/birdingtrail/img/header_logo.png"></a>-->
+      <header class="masthead" id="bt-header">
+        <!--<div class="inner">-->
+          <div class="masthead-brand">
+            <?php
+                if (!is_page_template('front-page.php') and has_custom_logo() ) {
+                  the_custom_logo();
+                } else {
+                  echo '<h3>';
+                  echo bloginfo('name');
+                  echo '</h3>';
+                };
+            ?>
+          </div>
           <?php wp_nav_menu( array( 
             'theme_location' => 'header-menu', 
             'menu_class' => 'nav nav-masthead justify-content-center list-inline' 
           ) ); ?>
 
-        </div>
+        <!-- </div> -->
       </header>
