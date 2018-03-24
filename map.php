@@ -37,7 +37,7 @@ get_header(); ?>
 		- see code in initialize below,  
 
 -->
-<main role="main" class="inner map">
+<main id="map-modal-container" role="main" class="inner map">
   <!-- The Modal -->
   <div class="modal fade" id="infoPanel">
     <div class="modal-dialog modal-dialog-centered"  >
@@ -147,7 +147,7 @@ get_header(); ?>
 		if (typeof(logVisit)==='undefined') logVisit = true;
 		if (navigator.geolocation) {
 		  navigator.geolocation.getCurrentPosition(function(position) {
-		  	console.log("geolocation allowed");
+		  	//console.log("geolocation allowed");
 		  	
 		  	//check for cookie (repeat user)
 		  	var ncbtUserId = guid();
@@ -180,7 +180,7 @@ get_header(); ?>
 			            'lon' : position.coords.longitude //longitude
 			        },
 					success: function(data) {
-					  console.log(data);
+					  //console.log(data);
 			        }
 			    });
 		  	};
@@ -193,16 +193,40 @@ get_header(); ?>
 
 	//set map height function
 	function setMapHeight() {
+		setTimeout(function(){
+			 //determine header, footer heights
+			 hHeight = parseInt(jQuery(".masthead").css("height"));
+			 fHeight = parseInt(jQuery(".mastfoot").css("height"));
+			 fhHeight = fHeight+hHeight;
+			 bHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0); //maximum dimensions for window
 
-	 //determine header, footer heights
-	 fhHeight = parseInt(jQuery(".masthead").css("height")) + parseInt(jQuery(".mastfoot").css("height"));
-	 bHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0); //maximum dimensions for window
+			 hoHeight = parseInt(jQuery(".masthead").outerHeight(true));
+			 foHeight = parseInt(jQuery(".mastfoot").outerHeight(true));
+			 fhoHeight = hoHeight + foHeight;
+			 
+			 mHeight = bHeight - fhoHeight - 5;
 
-	 jQuery("#map_canvas").css("height",bHeight - fhHeight-1); //set map canvas to new dimensions (window - footer + header)
+			/*
+			 console.log("hh: " + String(hHeight));
+			 console.log("fh: " + String(fHeight));
+			 console.log("fhh: " + String(fhHeight));
+			 console.log("bh: " + String(bHeight));
+			 console.log("mh: " + String(bHeight - fhHeight));
 
+			 console.log("hoh: " + String(hoHeight));
+			 console.log("foh: " + String(foHeight));
+			 console.log("fohh: " + String(fhoHeight));
+			 console.log("mohh: " + String(mHeight));
+			*/
+
+			 jQuery("#map_canvas").css("height",mHeight); //set map canvas to new dimensions (window - footer + header);
+			 jQuery("#map-modal-container").css("height",mHeight); //set map canvas to new dimensions (window - footer + header);
+
+		}, 0);
 	};
 
 	jQuery(document).ready(function(){
+	//jQuery(function(){
 		
 		//attempt to get geolocation from browser window
 		tryGeolocation();	
@@ -215,6 +239,16 @@ get_header(); ?>
 
 		//add listener to change map size when window changes
 		google.maps.event.addDomListener(window, "resize", function() {setMapHeight();});
+
+		//add listener for header resize? - doesn't seem to work - NEEDS MORE TROUBLESHOTING!
+		/*
+		var headerDiv = jQuery('#bt-header');
+		console.log("headerDiv: " + headerDiv.outerHeight(true));
+
+		jQuery("#bt-header").resize(function (){
+			console.log("header size changed: " + String(jQuery("#bt-header").outerHeight(true)));
+		});
+		*/
 
 		//listen for modal panel close
 		//make sure to clear out fields
@@ -237,7 +271,7 @@ get_header(); ?>
 			};
 
 		map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-		console.log('map initiated');
+		//console.log('map initiated');
 
  		// run function to set map height on page load
 		setMapHeight();

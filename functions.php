@@ -33,6 +33,9 @@ function wpbootstrap_scripts_with_jquery()
 				//wp_enqueue_style('ncbt-map-style', get_stylesheet_directory_uri() . '/map.css');
 
 				break;
+			case 'blog':
+				wp_enqueue_style('blog-css', get_stylesheet_directory_uri() . '/css/blog.css');
+				break;
 		}
 	}
 }
