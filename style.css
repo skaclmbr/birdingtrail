@@ -51,31 +51,28 @@ body {
 }
 
 body {
+
   display: -ms-flexbox;
   display: -webkit-box;
-  display: flex;
+  display: inline;
+  justify-content: center;
   -ms-flex-pack: center;
   -webkit-box-pack: center;
-  justify-content: center;
   color: #fff;
   text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
   box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+  height:100%;
 }
 
-.bt-container {
-  padding: 0 1 0 1rem;
+#page-container {
+  padding:0rem;
 }
-
 .main-logo {
 	width:90%;
 }
 
 .map-body{
 	width:100%;
-}
-.bt-body {
-	width:100%;
-	padding:1.5rem 0 1.5rem 0;
 }
 
 /* =====================================================
@@ -94,12 +91,12 @@ img .header_logo {
   /*max-width:100%;*/
   padding-left:1.5rem;
   padding-right:1.5rem;
+  justify-content:space-between;
 }
 
 /*formatting for header logo*/
 .masthead img {
   width:auto;
-  float:left;
 }
 
 .masthead.inner {
@@ -110,7 +107,9 @@ img .header_logo {
 .inner {
   text-align:center;
 }
-
+.nav {
+  justify-content:flex-end;
+}
 .menu-item a:hover {
 	text-decoration:none;
 }
@@ -143,27 +142,36 @@ img .header_logo {
 
 /* logo  or text on front page*/
 .masthead-brand {
-	float:left;
+  display:inline-flex;
+	justify-content:flex-start; /*float left*/
+  padding-top:0rem;
+  padding-bottom:0rem;
+  pading-left:15px;
+  pading-right:15px;
+  width:auto;
 }
 
 /*contains menu items */
 .menu-main-container {
-	display:inline;
-	float:right;
+	justify-content:flex-end;
+  width:auto;
 }
 
 /*note: on the map page, trigger map dimensions when width reaches this threshold */
-@media (max-width:450px){ 
+@media (max-width:450px){
+  .masthead {
+    justify-content:center;
+    flex-direction:column;
+  }
 	.masthead-brand {
-		text-align:center;
-		float:none; /* needed for front-page */
+    justify-content:center;
 	}
 	
+  .nav-masthead {
+    justify-content:center;
+  }
 	.menu-main-container {
-		width:100%;
-	}
-	.masthead img {
-		float:none;
+    justify-content:center;
 	}
 }
 
@@ -171,8 +179,26 @@ img .header_logo {
  * Front Page (also called Cover)
  */
 
+.row-pad {
+  padding-top:1.1rem;
+  padding-bottom:0rem;
+}
+
+.learn-more {
+  margin-top:2rem;
+  background:#555;
+  padding-top:0.5rem;
+  padding-bottom:0.5rem;
+  margin-bottom:1rem;
+}
+.lead-label {
+  font-weight:500;
+  font-size:1.1rem;
+}
+
 .front-page {
   padding: 0 1.5rem;
+  flex-direction:column;
 }
 
 .front-page .btn-lg {
@@ -180,14 +206,65 @@ img .header_logo {
   font-weight: 700;
 }
 
-.inner {
+.front-page-logo {
+  width:50%;
+}
+.lead {
+  text-align:center;
+
+}
+.center-block {
   text-align:center;
 }
+
+.inner {
+  text-align:center;
+  padding-left:3rem;
+  padding-right:3rem;
+}
+
+fp-label {
+  font-size:0.8rem;
+}
+
+
+/* =====================================================
+ * Page
+ */
+.page-title {
+  text-align: Center;
+}
+
+/* =====================================================
+ * Banner Pages
+ */
+ .banner-page-subtitle {
+  font-family:'Pacifico',cursive;
+  font-style:italic;
+  font-size:2rem;
+  font-weight:500;
+  color:#a2a573;
+  padding-bottom:0rem;
+  margin-bottom:0rem;
+ }
+
+ .banner-page-primary {
+  background:#a2a573;
+  color:#fff;
+  position:relative;
+  top:-0.7rem;
+  padding-top:2rem;
+  padding-bottom:2rem;
+ }
+.bannder-page-primary.col-4{
+  height:4rem;
+}
+
+
 /* =====================================================
  * Map
  */
  
-/* controls map to be 80% width */
 .map-body {
   width:100%;
   height:100%;
@@ -197,8 +274,14 @@ img .header_logo {
   left:0rem;
   display:block;
  }
+
+#map-container {
+  width:100%;
+  margin:0;
+}
 #map_canvas {
 	width: 100%;
+  padding:0rem;
 }
 
 .map {
@@ -206,6 +289,20 @@ img .header_logo {
 	height:inherit;
   width:100%;
   padding: 0 0rem;
+}
+
+/* controls where map tool buttons are placed */
+
+#map-button-group {
+  margin-right:10px;
+  margin-top:10px;
+}
+
+#map-button-group .btn {
+}
+
+#map-button-group i {
+  font-size:1.75rem;
 }
 
 /* controls site detail popup background color */
@@ -258,9 +355,78 @@ button.close {
 	font-weight:300;
 	font-variant:small-caps;
 	font-size:1.2em;
+  cursor:pointer;
 }
 
 
+/* keep these in front of image */
+
+#modal-header-image {
+  width:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:0;
+}
+
+.modal-site-title {
+  z-index: 100;
+}
+.modal-open-status {
+  z-index: 110;
+}
+.modal-title {
+  z-index:100;
+  float:left;
+}
+
+.site-modal-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+
+}
+
+/* NOT NEEDED?
+.modal-title-background {
+  background: linear-gradient(to bottom, rgb(50,50,50, 0.8),rgb(50,50,50, 0));
+  height:8rem;
+  position:absolute;
+  top:0;
+  left:0;
+
+}
+*/
+#close-modal {
+  z-index:100;
+}
+
+#site-open-status {
+  z-index:100;
+  float:right;
+}
+
+.modal-footer {
+  margin:0rem;
+  flex-direcction:column;
+  height: 9rem;
+}
+
+/*
+ * Map Site Modal
+ */
+#HOURS {
+  padding-bottom:0.8rem;
+}
+
+/*
+ * blog
+ */
+
+.card-img-right {
+  height:5rem;
+}
 
 /*
  * Footer
