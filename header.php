@@ -12,25 +12,25 @@
 
   <body <?php body_class(); ?>>
 
-    <div class="bt-container d-flex h-100 mx-auto flex-column">
-    <!--<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">-->
-      <header class="masthead" id="bt-header">
-        <!--<div class="inner">-->
-          <div class="masthead-brand">
-            <?php
-                if (!is_page_template('front-page.php') and has_custom_logo() ) {
-                  the_custom_logo();
-                } else {
-                  echo '<h3>';
-                  echo bloginfo('name');
-                  echo '</h3>';
-                };
-            ?>
-          </div>
-          <?php wp_nav_menu( array( 
-            'theme_location' => 'header-menu', 
-            'menu_class' => 'nav nav-masthead justify-content-center list-inline' 
-          ) ); ?>
+  <div class="container-fluid mx-auto"> <!-- header container -->
+      <div class = "row masthead"> <!-- row container -->
+        <div class="masthead-brand col-xs-6"> <!-- either logo or name, float left or center -->
+          <?php
+              if (!is_page_template('front-page.php') and has_custom_logo() ) {
+                the_custom_logo();
+              } else {
+                echo '<h4>';
+                echo bloginfo('name');
+                echo '</h4>';
+              };
+          ?>
+        </div>
+      <!-- insert menu div -->
+      <?php wp_nav_menu( array( 
+        'theme_location' => 'header-menu', 
+        'menu_class' => 'nav nav-masthead',
+        'container_class' => 'menu-main-container col-xs-6'
+      ) ); ?>
 
-        <!-- </div> -->
-      </header>
+      </div>
+  </div> <!-- header container -->
