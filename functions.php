@@ -14,6 +14,10 @@ function wpbootstrap_scripts_with_jquery()
 	//wp_enqueue_script('popover', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', array('bootstrap','bootstrap-js'));
 	wp_enqueue_script( 'custom-script' );
 
+	//google fonts
+	wp_register_style('google_fonts','https://fonts.googleapis.com/css?family=Pacifico',array(),null);
+	wp_enqueue_style('google_fonts');
+
 	if (is_page() || is_single())
 	{
 		switch($post->post_name) //post_name is the post slug which is more consistent
@@ -27,13 +31,13 @@ function wpbootstrap_scripts_with_jquery()
 				//wp_enqueue_script('static_ncbt_points', get_stylesheet_directory_uri() . '/js/20180227_ncbt_points_static.js');
 				//get_template_part('page-templates/ncbt','dbconnect');
 				//wp_enqueue_script('jquery-mobile', get_stylesheet_directory_uri() . '/js/jquery.mobile-1.4.5.min.js', array(), null, true); //enables infopanel appear/disappear - note can custom create files needed for theme desired on website - would reduce download time
-				wp_enqueue_script('ncbt-google-map', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC1D62u_pN2PRUT6gCBkfZoZXiVU1F4Vxk&v=3'); //old key
+				wp_enqueue_script('ncbt-google-map', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC1D62u_pN2PRUT6gCBkfZoZXiVU1F4Vxk&v=3&libraries=places'); //old key, enable place id retrieval
 				wp_enqueue_script('infobox', get_stylesheet_directory_uri() . '/js/infobox.js', array('jquery'));
 				wp_enqueue_script('ncbt_map', get_stylesheet_directory_uri() . '/js/map.js');
 				//wp_enqueue_style('ncbt-map-style', get_stylesheet_directory_uri() . '/map.css');
 
 				break;
-			case 'blog':
+			case 'blog': //this doesn't seem to be triggered
 				wp_enqueue_style('blog-css', get_stylesheet_directory_uri() . '/css/blog.css');
 				break;
 		}
@@ -134,6 +138,33 @@ function get_ncbt_data() {
 				$conn->close();
 				wp_die(); //close db connection
 				break; //end switch code evaluation
+    		case "update_site_info": //update one field of site information
+				$servername = "localhost";
+				$username = "ncbirdin_ncbtweb";
+				$password = "9%VI&p&Yo844";
+
+				//connect to NCBT Site Data
+				$dbname = "ncbirdin_ncbt_data";
+				$conn = new mysqli($servername, $username, $password, $dbname);
+				
+				//data passed from successful geolocation
+	    		$field = strval( $_POST['field']);
+	    		$data = strval( $_POST['data']);
+	    		$siteslug = strval( $_POST['siteslug']);
+
+
+				//$sql = "INSERT INTO visits (PLATFORM, LAT, LON) VALUES ('test',35,85)"; //TESTING
+				$sql = "UPDATE site_data SET " . $field . " = '" . $data . "' WHERE SITESLUG = '" . $siteslug . "'"; //post data
+
+				if ($conn->query($sql) === TRUE) {
+					echo "Record updated successfully";
+				} else {
+				    echo "Error: " . $sql . "<br>" . $conn->error;
+				}
+				$conn->close();
+				wp_die(); //close db connection
+				break; //end switch code evaluation
+
     		default:
     			echo "no data";
     			break;
@@ -176,6 +207,14 @@ function bt_widgets_init() {
         'name'          => 'Footer - Copyright Text',
         'id'            => 'footer-copyright-text',
         'before_widget' => '<div class="inner footer_copyright_text">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h4>',
+        'after_title'   => '</h4>',
+    ) );
+     register_sidebar( array(
+        'name'          => 'Sidebar',
+        'id'            => 'sidebar-text',
+        'before_widget' => '<div class="col-9">',
         'after_widget'  => '</div>',
         'before_title'  => '<h4>',
         'after_title'   => '</h4>',
