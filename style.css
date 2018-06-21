@@ -75,6 +75,17 @@ body {
 	width:100%;
 }
 
+/*
+img {
+  max-width:98%;
+  height:auto;
+}
+*/
+img .aligncenter {
+  text-align:center;
+  margin:auto;
+}
+
 /* =====================================================
  * Header
  *	added wp css tags to bootstrap nav links (.menu-item tags) - dunno if this will mess with other menus though!
@@ -223,11 +234,219 @@ img .header_logo {
   padding-right:3rem;
 }
 
-fp-label {
+.fp-label {
   font-size:0.8rem;
 }
 
+/* =====================================================
+ * sidebar
+ */
 
+.sidebar {
+  border:#bbbbbb;
+  border-width:0.8em;
+  padding-top:15px;
+  border-radius: 3px;
+}
+
+.sidebar ul {
+  padding-left:30px;
+
+}
+.sidebar li a {
+}
+
+/* =====================================================
+ * blog
+ */
+
+.post-main {
+  margin-left:0;
+  margin-right:0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+}
+
+.display-4 {
+  font-size: 2.5rem;
+}
+
+.thumb-img {
+  width:100%;
+  border-radius:0 0 3px 3px;
+  position:unset;
+  bottom:0px;
+  top:unset;
+  left:0px;
+  right:unset;
+}
+
+.featured-img {
+  width:100%;
+  border-radius:0 0 3px 3px;
+  position:relative;
+  bottom:0px;
+  left:0px;
+}
+/*.featured-img {
+
+  border-radius:0 0 3px 3px;
+  position:absolute;
+  top:0px;
+  left:0px;
+}
+*/
+/* Bootstrap md breakpo - shifts from image below to image beside */
+@media (min-width:768px) {
+  .display-4 {
+    font-size: 3rem;
+  }
+
+.thumb-img{
+  height:100%;
+  border-radius:0 3px 3px 0;
+  width:initial;
+  position:absolute;
+  top:0px;
+  left:unset;
+  right:0px;
+  }
+
+/*.featured-img {
+  height: :100%;
+  float:right;
+  width:150px;
+  border-radius:0 3px 3px 0;
+  }
+*/
+}
+
+/* Bootstrap lg breakpoint */
+@media (min-width:992px) {
+
+
+
+/*.featured-img {
+  height: :100%;
+  float:right;
+  width:150px;
+  border-radius:0 3px 3px 0;
+  }
+*/
+
+}
+/* Bootstrap xl breakpoint */
+@media (min-width:1200px) {
+
+
+}
+
+.lede-card {
+  overflow:hidden;
+}
+
+.jumbotron {
+  margin-right:0;
+  margin-left:0;
+  padding:0;
+  border-color:#343a40 !important;
+}
+
+.jumbo-text {
+  padding:3rem;
+  background:#343a40;
+  z-index: 1;
+}
+
+.thumb-div {
+  margin: 0 auto;
+}
+
+/*
+ * Blog name and description
+ */
+.blog-title {
+  margin-bottom: 0;
+  font-size: 2rem;
+  font-weight: 400;
+}
+.blog-description {
+  font-size: 1.1rem;
+  color: #999;
+}
+
+.text-featured {
+  color:#ccc !important;
+  font-weight:600;
+}
+
+@media (min-width: 40em) {
+  .blog-title {
+    font-size: 3.5rem;
+  }
+}
+
+/*
+ * Blog posts
+ */
+.blog-post {
+  margin-bottom: 4rem;
+}
+.blog-post-title {
+  margin-bottom: .25rem;
+  font-size: 2.5rem;
+}
+.blog-post-meta {
+  margin-bottom: 1.25rem;
+  color: #999;
+}
+
+
+img.centered {
+display: block;
+margin-left: auto;
+margin-right: auto;
+}
+
+img.alignright {
+padding: 4px;
+margin: 0 0 2px 7px;
+display: inline;
+}
+
+img.alignleft {
+padding: 4px;
+margin: 0 7px 2px 0;
+display: inline;
+}
+
+.aligncenter {
+  width:100%;
+  height:initial;
+}
+
+.alignright {
+  float:right;
+}
+
+.alignleft {
+  float:left;
+}
+
+.wp-caption {
+  text-align: center;
+  font-style:italic;
+}
+
+/* Bootstrap sm breakpoint - makes all images full width */
+@media (max-width:768px) {
+  img.alignright,
+  img.alignleft {
+    float:none;
+  }
+}
 /* =====================================================
  * Page
  */
@@ -435,6 +654,11 @@ button.close {
   color: rgba(255, 255, 255, .5);
   text-align:center;
   line-height:0.8rem;
+ }
+
+ .mastfoot.inner {
+  padding-left:0rem;
+  padding-right:0rem;
  }
 
 .mastfoot p{
