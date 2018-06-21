@@ -37,7 +37,7 @@ function wpbootstrap_scripts_with_jquery()
 				//wp_enqueue_style('ncbt-map-style', get_stylesheet_directory_uri() . '/map.css');
 
 				break;
-			case 'blog': //this doesn't seem to be triggered
+			case 'blog': //this doesn't seem to be triggered - CONSIDER REMOVING
 				wp_enqueue_style('blog-css', get_stylesheet_directory_uri() . '/css/blog.css');
 				break;
 		}
@@ -177,6 +177,28 @@ function get_ncbt_data() {
 // ======================================================================================
 // add customization for theme
 
+//enables the featured image functionality on blog posts
+
+if (function_exists( 'add_theme_support')) {
+	add_theme_support('post-thumbnails');
+
+	set_post_thumbnail_size(120,9999,true);
+
+	//additional image sizes
+	//add_image_size('jumbo-thumb', 300, 9999, true); //blog front page image
+	add_image_size('jumbo-thumb', 480, 340, true); //blog front page image
+
+}
+
+
+/*
+if (function_exists( 'add_theme_support' )) {
+	set_post_thumbnail_size(150,150, true); //default featured image dimensions
+
+	//additiaonl image sizes
+	//add_image_size( 'category_thumb', 300, 9999); //300px wide and unlimited height
+}
+*/
 
 function btstarter_wp_setup() {
 
@@ -206,7 +228,7 @@ function bt_widgets_init() {
     register_sidebar( array(
         'name'          => 'Footer - Copyright Text',
         'id'            => 'footer-copyright-text',
-        'before_widget' => '<div class="inner footer_copyright_text">',
+        'before_widget' => '<div class="footer_copyright_text">',
         'after_widget'  => '</div>',
         'before_title'  => '<h4>',
         'after_title'   => '</h4>',
@@ -214,7 +236,7 @@ function bt_widgets_init() {
      register_sidebar( array(
         'name'          => 'Sidebar',
         'id'            => 'sidebar-text',
-        'before_widget' => '<div class="col-9">',
+        'before_widget' => '<div class="sidebar-item">',
         'after_widget'  => '</div>',
         'before_title'  => '<h4>',
         'after_title'   => '</h4>',
@@ -222,6 +244,9 @@ function bt_widgets_init() {
  
 }
 add_action( 'widgets_init', 'bt_widgets_init' );
+
+// ======================================================================================
+// enables featured blog posts
 
 
 // ======================================================================================
