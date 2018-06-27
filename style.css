@@ -677,15 +677,15 @@ button.close {
   line-height:1.2;
 }
 
-@media (max-width:768px) {
+@media screen and (max-width:768px) {
   .modal-title {
   font-size:1.5rem;
   }
 }
 
-@media (max-width:576px) {
+@media screen and (max-width:576px) {
   .modal-title {
-  font-size:1rem;
+  font-size:1.1rem;
   }
 }
 .site-modal-header {
