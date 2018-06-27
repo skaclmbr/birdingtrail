@@ -238,6 +238,14 @@ img .header_logo {
   font-size:0.8rem;
 }
 
+.fp-topic {
+  margin:0 0.5rem;
+  color:#a2a573;
+}
+.fp-topic-icon {
+  color: #a2a573;
+}
+
 /* =====================================================
  * sidebar
  */
@@ -265,9 +273,12 @@ img .header_logo {
   margin-right:0;
 }
 
+/*
 h1, h2, h3, h4, h5, h6 {
   font-family: "Playfair Display", Georgia, "Times New Roman", serif;
 }
+*/
+
 
 .display-4 {
   font-size: 2.5rem;
@@ -440,7 +451,7 @@ display: inline;
   font-style:italic;
 }
 
-/* Bootstrap sm breakpoint - makes all images full width */
+/* Bootstrap md breakpoint - makes all images full width */
 @media (max-width:768px) {
   img.alignright,
   img.alignleft {
@@ -461,24 +472,50 @@ display: inline;
   font-family:'Pacifico',cursive;
   font-style:italic;
   font-size:2rem;
-  font-weight:500;
+  font-weight:550;
+  line-height:1;
   color:#a2a573;
   padding-bottom:0rem;
   margin-bottom:0rem;
+  top:0.2rem;
  }
 
  .banner-page-primary {
   background:#a2a573;
   color:#fff;
   position:relative;
-  top:-0.7rem;
+  top: 0rem;
   padding-top:2rem;
   padding-bottom:2rem;
+  font-size:1rem;
  }
-.bannder-page-primary.col-4{
-  height:4rem;
+
+.banner-page-primary.col-4 {
+  padding:1rem 0;
 }
 
+.banner-page-main-button {
+  margin:0;
+  background:#a2a573;
+  border:none;
+  font-size:1rem;
+  width:inherit;
+  text-align:center;
+
+}
+
+@media (max-width:576px) {
+  .banner-page-subtitle {
+    font-size:1.5rem;
+  }
+  .banner-page-primary{
+    font-size:0.9rem;
+  }
+  .banner-page-main-button {
+    font-size:0.9rem;
+  }
+
+}
 
 /* =====================================================
  * Map
@@ -517,11 +554,64 @@ display: inline;
   margin-top:10px;
 }
 
-#map-button-group .btn {
-}
 
 #map-button-group i {
   font-size:1.75rem;
+}
+/*
+.infoBox {
+  opacity:0.9;
+  text-align: center;
+  font-size: 8pt;
+  max-width: 150px;
+  position: absolute;
+  visibility: visible;
+  width: 65px;
+  left: 411px;
+  top: -25px;
+}
+*/
+
+
+/* The popup bubble on map formatting */
+/* site label that pops up when point hovered over*/
+/* The bubble is anchored above the tip. */
+.popup-bubble-anchor {
+  position: absolute;
+  width: 100%;
+/*  bottom:  TIP_HEIGHT=  1.5rem;
+  left: 1.5rem;
+*/}
+
+.popup-bubble-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -100%);
+  /* Style the info window. */
+  box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.5);
+  max-width:15rem;
+  border:none;
+  border-radius:5px;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  background:#517098;
+  color:#ffffff;
+  padding:5.5px;
+  color:white;
+  line-height:1em;
+  font-weight:300;
+  font-variant:small-caps;
+  font-size:1em;
+  padding:0.6rem !important;
+  margin:0;
+  cursor:pointer;
+  z-index: null;
+}
+
+.popup-bubble-content:hover {
+  background:#444;
+  z-index: 999;
 }
 
 /* controls site detail popup background color */
@@ -531,51 +621,35 @@ display: inline;
 
 /* controls x color on site detail popup */
 button.close:hover {
-	color:#ddd;
+  color:#ddd;
 }
 
 button.close {
-	color:white;
+  color:white;
 }
 
 #map-location {
-	font-size:1.25rem;
-	cursor: pointer;
+  font-size:1.25rem;
+  cursor: pointer;
 }
 
 #map-location-container{
-	display:float-right;
+  display:float-right;
 }
 #button-container {
-	width:inherit;
-	margin-right:0rem;
-	margin-left:0rem;
+  width:inherit;
+  margin-right:0rem;
+  margin-left:0rem;
 }
 .foreground-fa {
-	color: #517098;
+  color: #517098;
 }
 
 /* controls card color */
 .card {
-	background: #365c8b;
+  background: #365c8b;
 }
 
-/* site label that pops up when point hovered over*/
-.site-popup {
-	border:none;
-	border-radius:5px;
-	-moz-border-radius:5px;
-	-webkit-border-radius:5px;
-	background:#517098;
-	color:#ffffff;
-	padding:5.5px;
-	color:white;
-	line-height:1.1em;
-	font-weight:300;
-	font-variant:small-caps;
-	font-size:1.2em;
-  cursor:pointer;
-}
 
 
 /* keep these in front of image */
@@ -586,6 +660,7 @@ button.close {
   top:0;
   left:0;
   z-index:0;
+  opacity:0.6;
 }
 
 .modal-site-title {
@@ -597,8 +672,16 @@ button.close {
 .modal-title {
   z-index:100;
   float:left;
+  font-size:2rem;
+  font-weight:650;
+  line-height:1.2;
 }
 
+@media (max-width:768px) {
+  .modal-title {
+  font-size:1.5rem;
+  }
+}
 .site-modal-header {
   padding: 1rem;
   border-bottom: 1px solid #e9ecef;
@@ -635,10 +718,32 @@ button.close {
 /*
  * Map Site Modal
  */
+
+
+
 #HOURS {
   padding-bottom:0.8rem;
 }
 
+.modal-footer-row {
+  margin:0 1rem !important;
+  width:100%;
+}
+
+.footer-footer-buttons {
+  display:inline;
+  padding:0 0.5rem 0 0.5rem;
+}
+
+.nav-web-buttons {
+  margin:0 0.25rem 0 0.25rem;
+}
+
+.site-open-badge {
+  margin:0.6rem 0;
+  padding:0.4rem;
+  display:block;
+}
 /*
  * blog
  */
