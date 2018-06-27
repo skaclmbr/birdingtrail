@@ -7,23 +7,52 @@
 * This function:
 *   - retrieves site detail
 *   - unhides the information panel
+*
+*   NEED: reorganize this code to perform ajax requests asynchronously
+*     Daisy chain them?
+*     - ncbirdingtrail.org database
+*     - google maps information
+*     - ebird information
 */
 var sitePlaceId;
 function triggerInfoPanel(slug){
+    var ncbtData;
 
     jQuery("#infoPanel").modal("show");
     //retrieve site data from server
-    data = jQuery.ajax({
-        type: "POST",
-        dataType: "json",
-        url: ajaxurl, //url for WP ajax php file, var def added to header in functions.php
-        data: {
-            'action': 'get_ncbt_data', //server side function
-            'dbrequest': 'site_detail', //request type
-            'siteslug' : slug //identifying data for the site
-        },
-        success: function(data) {populateInfoPanel(data);}
+    //make multiple async ajax requests, complete when finished
+
+    jQuery.when(
+
+
+
+
+    ).then(function(x){
+      console.log('jquery when works!');
     });
+
+      jQuery.ajax({
+          type: "POST",
+          dataType: "json",
+          url: ajaxurl, //url for WP ajax php file, var def added to header in functions.php
+          data: {
+              'action': 'get_ncbt_data', //server side function
+              'dbrequest': 'site_detail', //request type
+              'siteslug' : slug //identifying data for the site
+          },
+          success: function(data, status) {
+            console.log(status);
+            populateInfoPanel(data);}
+          //success: function(data) {ncbtData = data;}
+      });
+      
+    /*
+    ).then(function() {
+      console.log(ncbtData);
+      populateInfoPanel(ncbtData);
+      };
+    );
+    */
 };
 
 
@@ -31,10 +60,9 @@ function triggerInfoPanel(slug){
 * This function populates the information into the info panel
 */
 function populateInfoPanel(site_data) {
-    // populate infopanel with returned site data
+    // populate infopanel with returned site data from NCBT Database
     // array with available infopanel headings
-    //console.log(site_data);
-    //clearModalPanel();
+
     //TITLE
     jQuery('#NAME').empty().append(site_data['TITLE']);
     
@@ -47,15 +75,52 @@ function populateInfoPanel(site_data) {
     //HABITATS
     jQuery('#HABITATS').empty().append(site_data['HABITATS']);
 
+    // EXTWEBSITE Populate External Website, if exists
+    if (site_data['EXTWEBSITE'].length>0) {
+      webLink = jQuery ('<a/>', {
+        href: site_data['EXTWEBSITE'],
+        target: '_blank',
+        id: 'EXTWEBSITE',
+        class: 'btn btn-outline-light nav-web-buttons',
+        text: 'Website'
+      });
+      jQuery("#nav-web-div").append(webLink);
+
+    } else {
+      console.log ("no external website");
+    } 
+
+
+    //ADD SOCIAL MEDIA LINKS - NEEDS WORK; add FB, Insta links
+    smMessage = 'Plan on visiting ' + site_data['TITLE'] + ' on the NC Birding Trail soon!';
+    /*
+    * TWITTER
+    * https://twitter.com/intent/tweet?text=Hello%20World&hashtags=birding,ncbirds,ncbirding,ncwildlife&url=https%3A%2F%2Fncpif.org%2F&twitterdev=ncbirdingtrail%3ANCBT
+    * EXAMPLE: https://twitter.com/home?status=Just%20discovered%20that%20Anderson%20Point%20Park%20is%20on%20the%20%40ncbirdingtrail!%20%23birding%20%23ncbirding
+    */
+    var uri = 'https://twitter.com/intent/tweet?hashtags=birding,ncbirding,ncbirds&url=' + site_data['EXTWEBSITE'] + '&twitterdev=ncbirdingtrail&via=ncbirdingtrail&text=' + smMessage ;
+    console.log(encodeURI(uri));
+    jQuery('#twitter-share').attr('href',encodeURI(uri));
+    
+    /*
+    * FACEBOOK
+    * EXAMPLE: https://twitter.com/home?status=Just%20discovered%20that%20Anderson%20Point%20Park%20is%20on%20the%20%40ncbirdingtrail!%20%23birding%20%23ncbirding
+    *
+    
+    var fbUri = 'https://www.facebook.com/sharer.php?link=' + site_data['EXTWEBSITE'] + '&caption=' + smMessage ;
+    console.log(encodeURI(uri));
+    jQuery('#facebook-share').attr('href',encodeURI(fbUri));
+
+    */
+
+    // RETRIEVE GOOGLE PLACE ID
     //Find Place ID for Google information
     var siteLatLng = new google.maps.LatLng(site_data['LAT'],site_data['LON']);
 
-    //console.log(site_data['PLACEID']);
-    //console.log(sitePlaceId);
-    sitePlaceId =site_data['PLACEID']; 
-    if (sitePlaceId == null) {
+    sitePlaceId =site_data['PLACEID']; //check to see if site ID in database
+    if (sitePlaceId == null) { //if not, search google for it
         retrievePlaceId(site_data['TITLE'],site_data['SITESLUG'], siteLatLng ,function(results){
-            console.log("another function test: " + results);
+            //console.log("another function test: " + results);
             sitePlaceId = results;
             sitePlaceData = retrievePlaceData(sitePlaceId);
             //update database with PlaceID
@@ -63,47 +128,52 @@ function populateInfoPanel(site_data) {
         });
     } else {
         sitePlaceData = retrievePlaceData(sitePlaceId);
-        console.log('didnt look for placeid');
-    }//What to do if no record found?
+
+    }
+    //What to do if no record found?
     //retrieve place information from Google (if place ID retrieved)
     // MAKE SURE TO PUT IN CODE HERE TO HANDLE MULTIPLE PLACE ID Responses
 
-    //External Website    
-    jQuery("#EXTWEBSITE").attr("href", site_data['EXTWEBSITE']);
 
-    /*
+    /* GOOGLE DISTANCE INFO
     Get distance information from google, populate travel info
     This function calcluates the distance and travel time from the gmaps Directions Matrix
     https://developers.google.com/maps/documentation/javascript/distancematrix
     */
+    if (currLatLng){ //only do this if geolocation worked!
+        var distService = new google.maps.DistanceMatrixService();
+        var response = distService.getDistanceMatrix(
+          {
+            origins: [currLatLng],
+            destinations: [siteLatLng],
+            travelMode: 'DRIVING',
+            unitSystem: google.maps.UnitSystem.IMPERIAL,
+            avoidHighways: false,
+            avoidTolls: false,
+          }, callback);
+    
+        function callback(response, status) {
+          if (status !== 'OK') {
+                alert('Error was: ' + status);
+              } else {
+          var dist = response['rows'][0]['elements'][0]['distance'];
+          var dur = response['rows'][0]['elements'][0]['duration'];
+          retDistDur = {'dist':dist['text'],'dur':dur['text']};
+          jQuery("#TRAVELINFO").empty().append(retDistDur['dist'] + " away (" + retDistDur['dur'] + ")");
+        }
+    
+        };
+          //ADD link to google directions
+          dirUrl = mapsSelector(siteLatLng);
+          navLink = jQuery ('<a/>', {
+            href: dirUrl,
+            id: 'NAVIGATION',
+            class: 'btn btn-outline-light nav-web-buttons',
+            text: 'Navigate'
+          });
+          jQuery("#nav-web-div").append(navLink);
 
-    var distService = new google.maps.DistanceMatrixService();
-    var response = distService.getDistanceMatrix(
-      {
-        origins: [currLatLng],
-        destinations: [siteLatLng],
-        travelMode: 'DRIVING',
-        unitSystem: google.maps.UnitSystem.IMPERIAL,
-        avoidHighways: false,
-        avoidTolls: false,
-      }, callback);
-
-    function callback(response, status) {
-      if (status !== 'OK') {
-            alert('Error was: ' + status);
-          } else {
-      var dist = response['rows'][0]['elements'][0]['distance'];
-      var dur = response['rows'][0]['elements'][0]['duration'];
-      retDistDur = {'dist':dist['text'],'dur':dur['text']};
-      jQuery("#TRAVELINFO").empty().append(retDistDur['dist'] + " away (" + retDistDur['dur'] + ")");
     }
-
-    };
-      //ADD link to google directions
-      dirUrl = mapsSelector(siteLatLng);
-      //console.log (dirUrl);
-      jQuery("#NAVIGATION").empty().append("Navigate here").attr('href',dirUrl);
-
 }
 
 /* 
@@ -112,6 +182,7 @@ Clear out data and collapse all elements
 */
 function clearModalPanel () {
     //remove all "show" classes
+    // console.log('clear modal run');
     jQuery(".modal-content.show").removeClass("show");
 
     jQuery('#NAME').empty();   //TITLE    
@@ -131,9 +202,12 @@ function clearModalPanel () {
 
     jQuery('#twitter-share').removeAttr("href");
 
+    jQuery('#EXTWEBSITE').remove();
+    jQuery('#NAVIGATION').remove();
+
 }
 
-/*
+/* SEARCH GOOGLE FOR PLACE ID
 Check if Place ID exists from database,
     if not, retrieve and populate database
 
@@ -163,76 +237,110 @@ function retrievePlaceId(placeName, slug, location, rPID){
     });
 };
 
+// RETRIEVE GOOGLE PLACE INFORMAION
 function retrievePlaceData (p) {
     //pass place id, get data from Google
-    console.log('retrieve data: ' + p);
+    // console.log('retrieve data: ' + p);
 
-    var request = {placeId: p};
+    var request = {
+      placeId: p,
+      fields: ['name','geometry','opening_hours','types','photos','website','permanently_closed','url']
+    };
 
     placeDService = new google.maps.places.PlacesService(map);
     place = placeDService.getDetails(request,function (place, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
-        populateModal(place);
+        populateGoogleData(place);
       } else {
         return null;
       }
     });
 }
 
-/*
+/* POPULATE MODAL
 Populate the Modal with info from Google Place API
 */
-function populateModal(place){
-    console.log(place);
-    //populate Hours
-    if (place['opening_hours']) {
-        jQuery(place['opening_hours']['weekday_text']).each(function(i,val){
-            console.log(val)
-            jQuery("#HOURS").append('<div class="hours">' + val + '</div>');
+
+function populateGoogleData(place){
+  // console.log(place);
+  //HOURS
+  //remove all hours elements on modal    
+  jQuery('#HOURS-CARD').remove();
+  jQuery('#HOURS').remove();
+  jQuery('#HRSLINK').remove();
+
+
+  //POPULATE HOURS
+  if (place['opening_hours']) {
+    //console.log('adding hours elements');
+    //hours exists, add appropriate buttons
+    hrsCard = jQuery('<div/>',{
+      class: 'card',
+      id: 'HOURS-CARD'
+    });
+    hrsLink = jQuery('<a/>',{
+      class: 'btn btn-primary',
+      id: 'HRSLINK',
+      'data-toggle' : 'collapse',
+      href: '#HOURS',
+      text: 'Hours'
+    });
+
+    hrsList = jQuery('<div/>',{
+      class: 'collapse site-info',
+      id: 'HOURS'
+    });
+
+    hrsCard.append(hrsLink);
+    jQuery('#modal-footer').before(hrsCard);
+
+    jQuery('#modal-footer').before(hrsList);
+
+    //loop through daily hour elements and add to the new div
+    jQuery(place['opening_hours']['weekday_text']).each(function(i,val){
+        hrsDiv = jQuery ('<div/>', {
+          class: 'hours',
+          text: val
         });
-        if (place['opening_hours']['open_now']){
-            jQuery("#site-open-status").append("Open Now").addClass("badge-success");
-        } else {
-            jQuery("#site-open-status").append("Closed Now").addClass("badge-danger");
-        }
-        
+        jQuery("#HOURS").append(hrsDiv);
+    });
+
+    // ADD APPROPRIATE OPEN BADGE
+    if (place['opening_hours']['open_now']){
+        jQuery("#site-open-status").append("Open Now").addClass("badge-success");
+    } else {
+        jQuery("#site-open-status").append("Closed Now").addClass("badge-danger");
     }
-    //populate link
-    if (place['url']) {jQuery('#GOOGLELINK').attr('href',place['url']);};
+      
+  }
 
-    //retrieve/display photo
-    
-    var photos = place.photos;
-    if (photos) {
-        mWidth = jQuery('.site-modal-header').outerWidth();
-        mHeightNum = 120;
-        mHeight = String(mHeightNum) + 'px';
-        /* ATTEMPTING TO SHOW MIDDLE OF IMAGE
-        gImgHeight = photos[0]['height'] * (mWidth/photos[0]['width']); //calculate scaled height, used to position image
-        hImgTopLeft = Math.round((gImgHeight - mHeightNum)/2);
-        console.log(gImgHeight);
-        console.log('rect(' + hImgTopLeft + 'px, ' + mWidth + 'px,' + mHeight + ',0px)');
-        console.log(photos[0]['height']);
-        console.log(photos[0]['width']);
-        console.log(hImgTopLeft);
-        console.log(mWidth);
-        jQuery('#modal-header-image').css({'clip':'rect(' + hImgTopLeft + 'px, ' + mWidth + 'px,' + mHeight + ',0px)', 'top':'-'+gImgHeight});
-        console.log(String(photos[0].getUrl({'maxWidth': 35, 'maxHeight': 35})) );
-        */
-        //jQuery('.modal-title-background').css('width',mWidth);
-        jQuery('.site-modal-header').css('height',mHeight);
-        jQuery('#modal-header-image').attr('src',photos[0].getUrl({'maxWidth': mWidth}));
-        jQuery('#modal-header-image').css('clip','rect(0px, ' + mWidth + 'px,' + mHeight + ',0px)');
-    }
+  //POPULATE GOOGLE LINK - THIS IS REQUIRED TO USE GOOGLE SERVICES
+  if (place['url']) {jQuery('#GOOGLELINK').attr('href',place['url']);};
 
-    //Social Media Links
+  //RETRIEVE/DISPLAY PHOTO
+  var photos = place.photos;
+  if (photos) {
+      mWidth = jQuery('.site-modal-header').outerWidth();
+      mHeightNum = 120;
+      mHeight = String(mHeightNum) + 'px';
+      /* ATTEMPTING TO SHOW MIDDLE OF IMAGE
+      gImgHeight = photos[0]['height'] * (mWidth/photos[0]['width']); //calculate scaled height, used to position image
+      hImgTopLeft = Math.round((gImgHeight - mHeightNum)/2);
+      console.log(gImgHeight);
+      console.log('rect(' + hImgTopLeft + 'px, ' + mWidth + 'px,' + mHeight + ',0px)');
+      console.log(photos[0]['height']);
+      console.log(photos[0]['width']);
+      console.log(hImgTopLeft);
+      console.log(mWidth);
+      jQuery('#modal-header-image').css({'clip':'rect(' + hImgTopLeft + 'px, ' + mWidth + 'px,' + mHeight + ',0px)', 'top':'-'+gImgHeight});
+      console.log(String(photos[0].getUrl({'maxWidth': 35, 'maxHeight': 35})) );
+      */
+      //jQuery('.modal-title-background').css('width',mWidth);
+      jQuery('.site-modal-header').css('height',mHeight);
+      jQuery('#modal-header-image').attr('src',photos[0].getUrl({'maxWidth': mWidth}));
+      jQuery('#modal-header-image').css('clip','rect(0px, ' + mWidth + 'px,' + mHeight + ',0px)');
+  }
 
-    //TWITTER
-    // https://twitter.com/intent/tweet?text=Hello%20World&hashtags=birding,ncbirds,ncbirding,ncwildlife&url=https%3A%2F%2Fncpif.org%2F&twitterdev=ncbirdingtrail%3ANCBT
-    var uri = "https://twitter.com/intent/tweet?text=" + place['name'] + '&hashtags=birding,ncbirding,ncbirds&url=' + place['website'] + '&twitterdev=ncbirdingtrail';
-    console.log(encodeURI(uri));
-    jQuery('#twitter-share').attr('href',encodeURI(uri));
-    
 }
 
 
@@ -259,7 +367,7 @@ function updateSiteInfo(slug, f, d) {
             'data' : d //data to insert
         },
         success: function(data) {
-          console.log(data);
+          // console.log(data);
         }
 
     });
