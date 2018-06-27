@@ -278,8 +278,7 @@ get_header(); ?>
 	    
 	    this.position = position;
 	    this.siteslug = siteslug;
-
-	    content.classList.add('popup-bubble-content');
+ 	    content.classList.add('popup-bubble-content');
 
 	    this.anchor = document.createElement('div');
 	    this.anchor.classList.add('popup-bubble-anchor');
