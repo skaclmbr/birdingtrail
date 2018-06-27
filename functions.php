@@ -32,7 +32,7 @@ function wpbootstrap_scripts_with_jquery()
 				//get_template_part('page-templates/ncbt','dbconnect');
 				//wp_enqueue_script('jquery-mobile', get_stylesheet_directory_uri() . '/js/jquery.mobile-1.4.5.min.js', array(), null, true); //enables infopanel appear/disappear - note can custom create files needed for theme desired on website - would reduce download time
 				wp_enqueue_script('ncbt-google-map', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC1D62u_pN2PRUT6gCBkfZoZXiVU1F4Vxk&v=3&libraries=places'); //old key, enable place id retrieval
-				wp_enqueue_script('infobox', get_stylesheet_directory_uri() . '/js/infobox.js', array('jquery'));
+				// wp_enqueue_script('infobox', get_stylesheet_directory_uri() . '/js/infobox.js', array('jquery')); //not needed
 				wp_enqueue_script('ncbt_map', get_stylesheet_directory_uri() . '/js/map.js');
 				//wp_enqueue_style('ncbt-map-style', get_stylesheet_directory_uri() . '/map.css');
 
@@ -76,16 +76,20 @@ function get_ncbt_data() {
 
 		$request = strval( $_POST['dbrequest'] );
 		//$response_safe = filter_var($siteslug, FILTER_SANITIZE_STRING); //OLD VERSION - reinstate?
+		// get db login information
+		include('db_info.php');
+
 	    switch ($request) {
 	    	case "site_detail":
 	    		$siteslug = strval( $_POST['siteslug']);
 				//Connect to database, get site data
-				$servername = "localhost";
-				$username = "ncbirdin_ncbtweb";
-				$password = "9%VI&p&Yo844";
+				// $servername = "localhost";
+				// $username = "ncbirdin_ncbtweb";
+				// $password = "9%VI&p&Yo844";
 
-				//connect to NCBT Site Data
-				$dbname = "ncbirdin_ncbt_data";
+				// //connect to NCBT Site Data
+				// $dbname = "ncbirdin_ncbt_data";
+
 				$conn = new mysqli($servername, $username, $password, $dbname);
 				
 				$sql = 'SELECT * FROM site_data WHERE SITESLUG = "' . $siteslug . '" LIMIT 1'; //will only return one record
@@ -111,12 +115,12 @@ function get_ncbt_data() {
 				wp_die(); //close DB connection
 	    		break; //end switch code
     		case "log_visit": //post website visit data
-				$servername = "localhost";
-				$username = "ncbirdin_ncbtweb";
-				$password = "9%VI&p&Yo844";
+				// $servername = "localhost";
+				// $username = "ncbirdin_ncbtweb";
+				// $password = "9%VI&p&Yo844";
 
-				//connect to NCBT Site Data
-				$dbname = "ncbirdin_ncbt_data";
+				// //connect to NCBT Site Data
+				// $dbname = "ncbirdin_ncbt_data";
 				$conn = new mysqli($servername, $username, $password, $dbname);
 				
 				//data passed from successful geolocation
@@ -139,12 +143,12 @@ function get_ncbt_data() {
 				wp_die(); //close db connection
 				break; //end switch code evaluation
     		case "update_site_info": //update one field of site information
-				$servername = "localhost";
-				$username = "ncbirdin_ncbtweb";
-				$password = "9%VI&p&Yo844";
+				// $servername = "localhost";
+				// $username = "ncbirdin_ncbtweb";
+				// $password = "9%VI&p&Yo844";
 
-				//connect to NCBT Site Data
-				$dbname = "ncbirdin_ncbt_data";
+				// //connect to NCBT Site Data
+				// $dbname = "ncbirdin_ncbt_data";
 				$conn = new mysqli($servername, $username, $password, $dbname);
 				
 				//data passed from successful geolocation
