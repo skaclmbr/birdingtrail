@@ -19,32 +19,47 @@ function triggerInfoPanel(slug){
     var ncbtData;
 
     jQuery("#infoPanel").modal("show");
-    //retrieve site data from server
+    //TESTING/TODO: retrieve site data from server
     //make multiple async ajax requests, complete when finished
 
-    jQuery.when(
+    // jQuery.when(
 
 
 
 
-    ).then(function(x){
-      console.log('jquery when works!');
+    // ).then(function(x){
+    //   console.log('jquery when works!');
+    // });
+    console.log(slug);
+    jQuery.ajax({
+        type: "POST",
+        dataType: "json",
+        url: ajaxurl, //url for WP ajax php file, var def added to header in functions.php
+        data: {
+            'action': 'get_ncbt_data', //server side function
+            'dbrequest': 'site_detail', //request type
+            // 'slug': 'airlie-gardens',
+            // 'dbrequest': 'test', //TESTING
+            // 'siteslug' : 'airlie-gardens' //identifying data for the site
+            'slug' : slug //identifying data for the site - for some reason this doesn't work if passed variable is 'siteslug'
+        },
+        success: function(data, status) {
+          
+          // console.log("success triggered");
+          // console.log(status);
+          console.log(data);
+
+          populateInfoPanel(data); //commented out for testing
+          }, 
+        error: function(jqxhr, status, exception) {
+/*
+          console.log("error triggered");
+          console.log(status + " : " + exception);
+
+*/        }
+
+        //success: function(data) {ncbtData = data;}
     });
-
-      jQuery.ajax({
-          type: "POST",
-          dataType: "json",
-          url: ajaxurl, //url for WP ajax php file, var def added to header in functions.php
-          data: {
-              'action': 'get_ncbt_data', //server side function
-              'dbrequest': 'site_detail', //request type
-              'siteslug' : slug //identifying data for the site
-          },
-          success: function(data, status) {
-            console.log(status);
-            populateInfoPanel(data);}
-          //success: function(data) {ncbtData = data;}
-      });
       
     /*
     ).then(function() {
@@ -75,7 +90,7 @@ function populateInfoPanel(site_data) {
     //HABITATS
     jQuery('#HABITATS').empty().append(site_data['HABITATS']);
 
-    // EXTWEBSITE Populate External Website, if exists
+    // EXTWEBSITE create external website button, if exists
     if (site_data['EXTWEBSITE'].length>0) {
       webLink = jQuery ('<a/>', {
         href: site_data['EXTWEBSITE'],
@@ -118,13 +133,19 @@ function populateInfoPanel(site_data) {
     var siteLatLng = new google.maps.LatLng(site_data['LAT'],site_data['LON']);
 
     sitePlaceId =site_data['PLACEID']; //check to see if site ID in database
-    if (sitePlaceId == null) { //if not, search google for it
+    console.log("site place ID to pass: " + sitePlaceId);
+    if (!sitePlaceId.length) { //if not, search google for it
         retrievePlaceId(site_data['TITLE'],site_data['SITESLUG'], siteLatLng ,function(results){
             //console.log("another function test: " + results);
             sitePlaceId = results;
-            sitePlaceData = retrievePlaceData(sitePlaceId);
-            //update database with PlaceID
-            updateSiteInfo(site_data['SITESLUG'],'PLACEID',sitePlaceId);
+            console.log(results);
+            if(sitePlaceId) {
+              sitePlaceData = retrievePlaceData(sitePlaceId);
+            } else {
+              //no placeid returned...
+            };
+            //update database with PlaceID - don't need this? done in retrievePlaceData()
+            // updateSiteInfo(site_data['SITESLUG'],'PLACEID',sitePlaceId);
         });
     } else {
         sitePlaceData = retrievePlaceData(sitePlaceId);
@@ -227,9 +248,11 @@ function retrievePlaceId(placeName, slug, location, rPID){
         // Checks that the PlacesServiceStatus is OK, and adds a marker
         // using the place ID and location from the PlacesService.
         if (status == google.maps.places.PlacesServiceStatus.OK) {
+            console.log("google placeid found, updating database");
             updateSiteInfo(slug, 'PLACEID',results[0].place_id);
             rPID(results[0].place_id);
         } else {
+            console.log("no google placeid found");
             rPID(null);
         }
     
@@ -362,14 +385,16 @@ function updateSiteInfo(slug, f, d) {
         data: {
             'action': 'get_ncbt_data', //server side function
             'dbrequest': 'update_site_info', //add to the visit table
-            'siteslug': slug, //site slug
+            'slug': slug, //site slug - for some reason, using siteslug as variable causes error
             'field': f, //field to update
             'data' : d //data to insert
         },
         success: function(data) {
-          // console.log(data);
+          console.log(slug + ", " + f + ", " + data);
+        },
+        error: function(jqxhr, status, exception) {
+          console.log(status + " : " + exception);
         }
-
     });
 };
 
