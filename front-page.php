@@ -30,9 +30,9 @@ get_header(); ?>
 			<div class="col-12 lead lead-label">Learn More</div>
 		</div>
 		<div class="row row-pad">
-			<div class="col center-block"><a href="/birdwatching"><i class="fa fa-binoculars fa-2x"></i></a><p class="fp-label">Birdwatching</p></div>
-			<div class="col center-block"><a href="/economy"><i class="fa fa-usd fa-2x"></i></a><p class="fp-label">Economy</p></div>
-			<div class="col center-block"><a href="/education"><i class="fa fa-leaf fa-2x"></i></a><p class="fp-label">Conservation</p></div>
+			<div class="col center-block fp-topic"><a href="/birdwatching"><i class="fp-topic-icon fa fa-binoculars fa-2x"></i></a><p class="fp-label">Birdwatching</p></div>
+			<div class="col center-block fp-topic"><a href="/economy"><i class="fp-topic-icon fa fa-usd fa-2x"></i></a><p class="fp-label">Economy</p></div>
+			<div class="col center-block fp-topic"><a href="/education"><i class="fp-topic-icon fa fa-leaf fa-2x"></i></a><p class="fp-label">Conservation</p></div>
 		</div>
 	</div>
 </main>
