@@ -12,7 +12,7 @@ function wpbootstrap_scripts_with_jquery()
 	// Register the script like this for a theme:
 	wp_enqueue_script( 'bootstrap-js', get_template_directory_uri() . '/bootstrap/js/bootstrap.min.js', array( 'jquery' ), '4.0.0', false );
 	//wp_enqueue_script('popover', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js', array('bootstrap','bootstrap-js'));
-	wp_enqueue_script( 'custom-script' );
+	// wp_enqueue_script( 'custom-script' );
 
 	//google fonts
 	wp_register_style('google_fonts','https://fonts.googleapis.com/css?family=Pacifico',array(),null);
@@ -64,7 +64,6 @@ function pluginname_ajaxurl() {
 //Retrieves site data from database
 add_action( 'wp_ajax_get_ncbt_data', 'get_ncbt_data' );
 add_action( 'wp_ajax_nopriv_get_ncbt_data', 'get_ncbt_data' );
-//add_action( 'wp_ajax_my_action', 'my_action' );
 
 function get_ncbt_data() {
 
@@ -75,45 +74,107 @@ function get_ncbt_data() {
 	} else {
 
 		$request = strval( $_POST['dbrequest'] );
+
 		//$response_safe = filter_var($siteslug, FILTER_SANITIZE_STRING); //OLD VERSION - reinstate?
+
 		// get db login information
 		include('db_info.php');
 
 	    switch ($request) {
-	    	case "site_detail":
-	    		$siteslug = strval( $_POST['siteslug']);
-				//Connect to database, get site data
-				// $servername = "localhost";
-				// $username = "ncbirdin_ncbtweb";
-				// $password = "9%VI&p&Yo844";
+	    	case "site_markers":
+	    		// build and return javascript functions to place markers and labels on the map for sites
 
-				// //connect to NCBT Site Data
-				// $dbname = "ncbirdin_ncbt_data";
+				//======================================================================
+				//The following is working code that downloads the most recent ncbt data
+				//TODO: Rewrite this function to be included in the functions.php get_ncbt_data() function (remove duplication)
+				//POTENTIAL FUTURE - move this to a CRON JOB that runs each night and creates static js file (if it speeds loading)
+				//======================================================================
+
+				//Connect to database, get site data
+				// get db login information
+				include('db_info.php');
 
 				$conn = new mysqli($servername, $username, $password, $dbname);
-				
-				$sql = 'SELECT * FROM site_data WHERE SITESLUG = "' . $siteslug . '" LIMIT 1'; //will only return one record
-				//$sql = "SELECT * FROM site_data"; //get all data
-				//$result = $conn->query($sql);
+				// Check connection
+				if ($conn->connect_error) {
+				   die("console.log('Connection failed');");
+				}; 
+				// else {
+				//   echo "console.log('Connected successfully - creating markers and listeners');\n";
+				// };
+
+				//RETRIEVE ONLY DATA NEEDED TO PLACE MARKERS ON MAP
+				$sql = "SELECT SITESLUG, TITLE, LAT, LON FROM site_data";
 				$result = $conn->query($sql);
 
-				echo json_encode($result->fetch_assoc()); //return results - single record
-							
-				//loop through resulting records
-				/*		
-				$rows = array();
-				if($result->num_rows > 0) {
-					while($r = $result->fetch_assoc()) {
-						$rows[] = array('SITESLUG'=>$r['SITESLUG'], 'TITLE'=>$r['TITLE'],'LAT'=>$r['LAT'],'LON'=>$r['LON']);
-						$slug = $row["SITESLUG"];
-						array_push(json_encode(array('ncbt_data_success'=>$slug));
 
-					};
-				};
-				echo json_encode($rows); //return results
-				*/
+				//loop through results, build JSON object
+				$rows = array();
+				if ($result->num_rows >0 ){
+					while($r = $result->fetch_assoc()) {
+						$rows[] = $r;
+					}
+				}
+
+				echo json_encode($rows); //return results - NO RECORD RESTRICTION!
+							
 				wp_die(); //close DB connection
-	    		break; //end switch code
+	    		break;
+
+	    	case "test":
+	    		//troubleshooting issue...
+	    		echo "successful test!";
+
+				wp_die(); //close DB connection
+	    		break;
+
+	    	case "site_detail":
+	    	//TESTING
+	    		// build and return javascript functions to place markers and labels on the map for sites
+
+				//======================================================================
+				//The following is working code that downloads the most recent ncbt data
+				//TODO: Rewrite this function to be included in the functions.php get_ncbt_data() function (remove duplication)
+				//POTENTIAL FUTURE - move this to a CRON JOB that runs each night and creates static js file (if it speeds loading)
+				//======================================================================
+
+				//Connect to database, get site data
+				// get db login information
+				include('db_info.php');
+
+				$siteslug = strval( $_POST['slug']); //for some reason, produces error when tag is 'siteslug' - WTF?
+
+				$conn = new mysqli($servername, $username, $password, $dbname);
+				// Check connection
+				if ($conn->connect_error) {
+				   die("console.log('Connection failed');");
+				}; 
+				// else {
+				//   echo "console.log('Connected successfully - creating markers and listeners');\n";
+				// };
+
+				//RETRIEVE ONLY DATA NEEDED TO PLACE MARKERS ON MAP
+				// $sql = "SELECT SITESLUG, TITLE, LAT, LON FROM site_data";
+				$sql = 'SELECT * FROM site_data WHERE SITESLUG = "' . $siteslug . '" LIMIT 1'; //will only return one record
+				// $sql = 'SELECT * FROM site_data WHERE SITESLUG = "anderson-point-park" LIMIT 1'; //will only return one record
+				$result = $conn->query($sql);
+
+
+				//loop through results, build JSON object
+/*				$rows = array();
+				if ($result->num_rows >0 ){
+					while($r = $result->fetch_assoc()) {
+						$rows[] = $r;
+					}
+				}
+*/
+				// echo $siteslug;
+				echo json_encode($result->fetch_assoc()); //return results - NO RECORD RESTRICTION!
+							
+				wp_die(); //close DB connection
+	    		break;
+
+
     		case "log_visit": //post website visit data
 				// $servername = "localhost";
 				// $username = "ncbirdin_ncbtweb";
@@ -142,6 +203,7 @@ function get_ncbt_data() {
 				$conn->close();
 				wp_die(); //close db connection
 				break; //end switch code evaluation
+
     		case "update_site_info": //update one field of site information
 				// $servername = "localhost";
 				// $username = "ncbirdin_ncbtweb";
@@ -154,7 +216,7 @@ function get_ncbt_data() {
 				//data passed from successful geolocation
 	    		$field = strval( $_POST['field']);
 	    		$data = strval( $_POST['data']);
-	    		$siteslug = strval( $_POST['siteslug']);
+	    		$siteslug = strval( $_POST['slug']);
 
 
 				//$sql = "INSERT INTO visits (PLATFORM, LAT, LON) VALUES ('test',35,85)"; //TESTING
