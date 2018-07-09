@@ -92,9 +92,6 @@ get_header(); ?>
   					<a href="#HABITATS" class="btn btn-primary" data-toggle="collapse">Habitats</a>
   				</div>
 				<div id="HABITATS" class="collapse site-info"></div>
-				<div id="FEATURES-CARD" class="card">
-  					<a href="#FEATURES" class="btn btn-primary" data-toggle="collapse">Features</a>
-  				</div>
 
 				<!-- ADD FEATURE LOGOS AS ANOTHER SECTION HERE -->
 
