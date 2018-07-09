@@ -30,7 +30,7 @@ function triggerInfoPanel(slug){
     // ).then(function(x){
     //   console.log('jquery when works!');
     // });
-    console.log(slug);
+    // console.log(slug);
     jQuery.ajax({
         type: "POST",
         dataType: "json",
@@ -47,7 +47,7 @@ function triggerInfoPanel(slug){
           
           // console.log("success triggered");
           // console.log(status);
-          console.log(data);
+          // console.log(data);
 
           populateInfoPanel(data); //commented out for testing
           }, 
@@ -114,7 +114,7 @@ function populateInfoPanel(site_data) {
     * EXAMPLE: https://twitter.com/home?status=Just%20discovered%20that%20Anderson%20Point%20Park%20is%20on%20the%20%40ncbirdingtrail!%20%23birding%20%23ncbirding
     */
     var uri = 'https://twitter.com/intent/tweet?hashtags=birding,ncbirding,ncbirds&url=' + site_data['EXTWEBSITE'] + '&twitterdev=ncbirdingtrail&via=ncbirdingtrail&text=' + smMessage ;
-    console.log(encodeURI(uri));
+    // console.log(encodeURI(uri));
     jQuery('#twitter-share').attr('href',encodeURI(uri));
     
     /*
@@ -133,16 +133,17 @@ function populateInfoPanel(site_data) {
     var siteLatLng = new google.maps.LatLng(site_data['LAT'],site_data['LON']);
 
     sitePlaceId =site_data['PLACEID']; //check to see if site ID in database
-    console.log("site place ID to pass: " + sitePlaceId);
+    // console.log("site place ID to pass: " + sitePlaceId);
     if (!sitePlaceId.length) { //if not, search google for it
         retrievePlaceId(site_data['TITLE'],site_data['SITESLUG'], siteLatLng ,function(results){
             //console.log("another function test: " + results);
             sitePlaceId = results;
-            console.log(results);
+            // console.log(results);
             if(sitePlaceId) {
               sitePlaceData = retrievePlaceData(sitePlaceId);
             } else {
               //no placeid returned...
+      
             };
             //update database with PlaceID - don't need this? done in retrievePlaceData()
             // updateSiteInfo(site_data['SITESLUG'],'PLACEID',sitePlaceId);
@@ -248,7 +249,7 @@ function retrievePlaceId(placeName, slug, location, rPID){
         // Checks that the PlacesServiceStatus is OK, and adds a marker
         // using the place ID and location from the PlacesService.
         if (status == google.maps.places.PlacesServiceStatus.OK) {
-            console.log("google placeid found, updating database");
+            // console.log("google placeid found, updating database");
             updateSiteInfo(slug, 'PLACEID',results[0].place_id);
             rPID(results[0].place_id);
         } else {
@@ -390,10 +391,10 @@ function updateSiteInfo(slug, f, d) {
             'data' : d //data to insert
         },
         success: function(data) {
-          console.log(slug + ", " + f + ", " + data);
+          // console.log(slug + ", " + f + ", " + data);
         },
         error: function(jqxhr, status, exception) {
-          console.log(status + " : " + exception);
+          // console.log(status + " : " + exception);
         }
     });
 };
