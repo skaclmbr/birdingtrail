@@ -98,23 +98,6 @@ function populateInfoPanel(site_data) {
     jQuery('#HABITATS').empty().append(site_data['HABITATS']);
 
     //FEATURE ICONS
-    // add icons to represent features
-    console.log(site_data);
-
-/*    for (var i=0, item; item=featureFields[i]; i++) {
-      //insert code here to include icons (or make visible?)
-      if (site_data[item]==1){
-        console.log(item);
-        // jQuery('#feature-'+ item).css('display', 'inline');
-        jQuery('#feature-'+ item).removeClass('f-hide');
-        // jQuery('#feature-'+ item).addClass('f-show');
-
-      } else {
-        jQuery('#feature-'+ item).addClass('f-hide');
-
-      }
-    }
-*/
     // loop through badgest on modal, retrieve appropriate site data to determine if to display
     jQuery('.feature-img').each(function() {
       id = jQuery(this).attr('id');
