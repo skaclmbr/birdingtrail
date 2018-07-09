@@ -653,9 +653,13 @@ button.close {
 /* controls feature badges */
 
 .feature-img {
-  width:30px;
-  height:30px;
-  margin:0.8rem;
+  width:20px;
+  height:20px;
+  float:left;
+  margin-top:0.5rem;
+  margin-bottom:0.5rem;
+  margin-left:0rem;
+  margin-right:0.5rem;
   display:inline;
   border-radius:5px;
   -moz-border-radius:5px;
@@ -666,9 +670,6 @@ button.close {
   display:none;
 }
 
-.f-show {
-  display:inline;
-}
 
 /* keep these in front of image */
 
@@ -730,7 +731,8 @@ button.close {
 
 #site-open-status {
   z-index:100;
-  float:right;
+  float:left;
+  font-size:0.65rem;
 }
 
 .modal-footer {

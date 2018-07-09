@@ -365,7 +365,7 @@ function populateGoogleData(place){
   var photos = place.photos;
   if (photos) {
       mWidth = jQuery('.site-modal-header').outerWidth();
-      mHeightNum = 120;
+      mHeightNum = 180;
       mHeight = String(mHeightNum) + 'px';
       /* ATTEMPTING TO SHOW MIDDLE OF IMAGE
       gImgHeight = photos[0]['height'] * (mWidth/photos[0]['width']); //calculate scaled height, used to position image
