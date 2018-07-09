@@ -15,6 +15,8 @@
 *     - ebird information
 */
 var sitePlaceId;
+var featureFields = ['BOATACCESS', 'BOATLAUNCH','CAMPING','FEE','HANDICAP','HIKING','HUNTING','INTERPRETIVE','PICNIC','RESTROOMS','TRAILMAPS','VIEWING','VISITOR'];
+
 function triggerInfoPanel(slug){
     var ncbtData;
 
@@ -23,9 +25,14 @@ function triggerInfoPanel(slug){
     //make multiple async ajax requests, complete when finished
 
     // jQuery.when(
-
-
-
+      /*
+      *  put code here to execute calls to external APIs
+      *  1. ncbt site information from database
+      *  2. if google PlaceID, skip 3
+      *  3. search for google placeID
+      *  4. retrieve google place information
+      *  5. populate modal!
+      */
 
     // ).then(function(x){
     //   console.log('jquery when works!');
@@ -89,6 +96,35 @@ function populateInfoPanel(site_data) {
 
     //HABITATS
     jQuery('#HABITATS').empty().append(site_data['HABITATS']);
+
+    //FEATURE ICONS
+    // add icons to represent features
+    console.log(site_data);
+
+/*    for (var i=0, item; item=featureFields[i]; i++) {
+      //insert code here to include icons (or make visible?)
+      if (site_data[item]==1){
+        console.log(item);
+        // jQuery('#feature-'+ item).css('display', 'inline');
+        jQuery('#feature-'+ item).removeClass('f-hide');
+        // jQuery('#feature-'+ item).addClass('f-show');
+
+      } else {
+        jQuery('#feature-'+ item).addClass('f-hide');
+
+      }
+    }
+*/
+    // loop through badgest on modal, retrieve appropriate site data to determine if to display
+    jQuery('.feature-img').each(function() {
+      id = jQuery(this).attr('id');
+      if (site_data[id]==1) {
+        jQuery(this).removeClass('f-hide');
+      } else {
+        jQuery(this).addClass('f-hide');
+      }
+    });
+
 
     // EXTWEBSITE create external website button, if exists
     if (site_data['EXTWEBSITE'].length>0) {
@@ -211,6 +247,7 @@ function clearModalPanel () {
     jQuery('#DESCRIPTION').empty();    //DESCRIPTION
     jQuery('#SPECIES').empty();     //SPECIES
     jQuery('#HABITATS').empty();    //HABITATS
+    jQuery('.feature-img').addClass('f-hide');    //FEATURE BADGES
 
     jQuery('#site-open-status').empty();
     jQuery('#site-open-status').removeClass('badge-danger badge-success');

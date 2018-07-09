@@ -536,13 +536,13 @@ display: inline;
   margin:0;
 }
 #map_canvas {
-	width: 100%;
+  width: 100%;
   padding:0rem;
 }
 
 .map {
-	padding:0rem;
-	height:inherit;
+  padding:0rem;
+  height:inherit;
   width:100%;
   padding: 0 0rem;
 }
@@ -650,7 +650,25 @@ button.close {
   background: #365c8b;
 }
 
+/* controls feature badges */
 
+.feature-img {
+  width:30px;
+  height:30px;
+  margin:0.8rem;
+  display:inline;
+  border-radius:5px;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+}
+
+.f-hide {
+  display:none;
+}
+
+.f-show {
+  display:inline;
+}
 
 /* keep these in front of image */
 

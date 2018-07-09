@@ -71,6 +71,27 @@ get_header(); ?>
   					<a href="#HABITATS" class="btn btn-primary" data-toggle="collapse">Habitats</a>
   				</div>
 				<div id="HABITATS" class="collapse site-info"></div>
+				<div id="FEATURES-CARD" class="card">
+  					<a href="#FEATURES" class="btn btn-primary" data-toggle="collapse">Features</a>
+  				</div>
+				<div id="FEATURES" class="collapse site-info">
+
+					<img src="<?php  echo get_template_directory_uri()  . '/img/BOATACCESS.png';?>" id="BOATACCESS" class="feature-img f-hide" alt="Boat Access"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/BOATLAUNCH.png';?>" id="BOATLAUNCH" class="feature-img" alt="Boat Launch"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/CAMPING.png';?>" id="CAMPING" class="feature-img f-hide" alt="Camping"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/FEE.png';?>" id="FEE" class="feature-img" alt="Fee"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/HANDICAP.png';?>" id="HANDICAP" class="feature-img f-hide" atl="Handicap"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/HIKING.png';?>" id="HIKING" class="feature-img f-hide" alt="Hiking"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/HUNTING.png';?>" id="HUNTING" class="feature-img f-hide" alt="Hunting"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/INTERPRETIVE.png';?>" id="INTERPRETIVE" class="feature-img f-hide" alt="Interpretive"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/PICNIC.png';?>" id="PICNIC" class="feature-img f-hide" alt="Picnic Facilities"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/RESTROOMS.png';?>" id="RESTROOMS" class="feature-img f-hide" alt="Restrooms"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/TRAILMAPS.png';?>" id="TRAILMAPS" class="feature-img f-hide" alt="Trail Maps"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/VIEWING.png';?>" id="VIEWING" class="feature-img f-hide" alt="Wildlife Viewing"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/VISITOR.png';?>" id="VISITOR" class="feature-img f-hide" alt="Visitor Services"/>
+
+
+				</div>
 
 				<!-- ADD FEATURE LOGOS AS ANOTHER SECTION HERE -->
 
