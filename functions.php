@@ -46,6 +46,9 @@ function wpbootstrap_scripts_with_jquery()
 add_action( 'wp_enqueue_scripts', 'wpbootstrap_scripts_with_jquery' );
 
 
+//==============================================================================
+//These functions enable a direct URL to a site on the map
+
 
 //==============================================================================
 //These functions feed NCBT or BFB data to a map page

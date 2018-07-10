@@ -98,7 +98,7 @@ function populateInfoPanel(site_data) {
     jQuery('#HABITATS').empty().append(site_data['HABITATS']);
 
     //FEATURE ICONS
-    // loop through badgest on modal, retrieve appropriate site data to determine if to display
+    // loop through amenity icons on modal, retrieve appropriate site data to determine if to display
     jQuery('.feature-img').each(function() {
       id = jQuery(this).attr('id');
       if (site_data[id]==1) {
@@ -236,17 +236,23 @@ function clearModalPanel () {
     jQuery('#site-open-status').removeClass('badge-danger badge-success');
     jQuery('#site-open-status').empty();
 
-    jQuery('.hours').remove();
+    //remove all hours elements on modal    
+    jQuery('#HOURS-CARD').remove();
+    jQuery('#HOURS').remove();
+    jQuery('#HRSLINK').remove();
+
 
     jQuery('.site-modal-header').removeAttr("height");
     //jQuery('#modal-header-image').css({'clip':'','top':0});
     jQuery('#modal-header-image').removeAttr("src");
 
+    //TODO remove button entirely? - any case when there wouldn't be a link?
     jQuery('#twitter-share').removeAttr("href");
 
     jQuery('#EXTWEBSITE').remove();
     jQuery('#NAVIGATION').remove();
 
+    //remove google link button at bottom
     jQuery('#google-button').remove();
 
 }
@@ -310,44 +316,23 @@ Populate the Modal with info from Google Place API
 function populateGoogleData(place){
   // console.log(place);
   //HOURS
-  //remove all hours elements on modal    
-  jQuery('#HOURS-CARD').remove();
-  jQuery('#HOURS').remove();
-  jQuery('#HRSLINK').remove();
-
 
   //POPULATE HOURS
   if (place['opening_hours']) {
     //console.log('adding hours elements');
     //hours exists, add appropriate buttons
-    hrsCard = jQuery('<div/>',{
-      class: 'card',
-      id: 'HOURS-CARD'
-    });
-    hrsLink = jQuery('<a/>',{
-      class: 'btn btn-primary',
-      id: 'HRSLINK',
-      'data-toggle' : 'collapse',
-      href: '#HOURS',
-      text: 'Hours'
-    });
+    hrsCard = jQuery('<div/>',{class: 'card', id: 'HOURS-CARD'});
+    hrsLink = jQuery('<a/>',{class: 'btn btn-primary',id: 'HRSLINK','data-toggle' : 'collapse',href: '#HOURS',text: 'Hours'});
 
-    hrsList = jQuery('<div/>',{
-      class: 'collapse site-info',
-      id: 'HOURS'
-    });
+    hrsList = jQuery('<div/>',{class: 'collapse site-info', id: 'HOURS'});
 
     hrsCard.append(hrsLink);
     jQuery('#modal-footer').before(hrsCard);
-
     jQuery('#modal-footer').before(hrsList);
 
     //loop through daily hour elements and add to the new div
     jQuery(place['opening_hours']['weekday_text']).each(function(i,val){
-        hrsDiv = jQuery ('<div/>', {
-          class: 'hours',
-          text: val
-        });
+        hrsDiv = jQuery ('<div/>', {class: 'hours', text: val});
         jQuery("#HOURS").append(hrsDiv);
     });
 
@@ -375,19 +360,6 @@ function populateGoogleData(place){
       mWidth = jQuery('.site-modal-header').outerWidth();
       mHeightNum = 180;
       mHeight = String(mHeightNum) + 'px';
-      /* ATTEMPTING TO SHOW MIDDLE OF IMAGE
-      gImgHeight = photos[0]['height'] * (mWidth/photos[0]['width']); //calculate scaled height, used to position image
-      hImgTopLeft = Math.round((gImgHeight - mHeightNum)/2);
-      console.log(gImgHeight);
-      console.log('rect(' + hImgTopLeft + 'px, ' + mWidth + 'px,' + mHeight + ',0px)');
-      console.log(photos[0]['height']);
-      console.log(photos[0]['width']);
-      console.log(hImgTopLeft);
-      console.log(mWidth);
-      jQuery('#modal-header-image').css({'clip':'rect(' + hImgTopLeft + 'px, ' + mWidth + 'px,' + mHeight + ',0px)', 'top':'-'+gImgHeight});
-      console.log(String(photos[0].getUrl({'maxWidth': 35, 'maxHeight': 35})) );
-      */
-      //jQuery('.modal-title-background').css('width',mWidth);
       jQuery('.site-modal-header').css('height',mHeight);
       jQuery('#modal-header-image').attr('src',photos[0].getUrl({'maxWidth': mWidth}));
       jQuery('#modal-header-image').css('clip','rect(0px, ' + mWidth + 'px,' + mHeight + ',0px)');
@@ -407,7 +379,6 @@ function updateSiteInfo(slug, f, d) {
     FUTURE - enable field array and data array, so that multiple fields can be updated 
     */
 
-    //console.log('update site table: ' + f + ' : '  + d);
     data = jQuery.ajax ({
         type:"POST",
         url: ajaxurl, //url for WP ajax php file, var def added to headeirn in functions.php
@@ -419,10 +390,8 @@ function updateSiteInfo(slug, f, d) {
             'data' : d //data to insert
         },
         success: function(data) {
-          // console.log(slug + ", " + f + ", " + data);
         },
         error: function(jqxhr, status, exception) {
-          // console.log(status + " : " + exception);
         }
     });
 };

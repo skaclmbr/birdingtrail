@@ -100,7 +100,8 @@ get_header(); ?>
           <div id="nav-web-div" class="modal-footer-row"></div>
           <div class="col-md modal-footer-footer">
 			  <div id="twitter-button" class="footer-footer-buttons"> <a id="twitter-share" href="" target="_blank"><i class="fa fa-twitter-square"></i></a></div>
-<!-- 
+			  
+			  <!-- POTENTIAL SOCIAL MEDIA LINKS TO ADD
 			  <div id="facebook-button" class="footer-footer-buttons"> <a id="facebook-share" href="" target="_blank"><i class="fa fa-facebook-square"></i></a></div>
 			  <div id="insta-button" class="footer-footer-buttons"> <a id="insta-share" href="" target="_blank"><i class="fa fa-instagram"></i></a></div>
 			   -->
