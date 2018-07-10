@@ -367,14 +367,27 @@ get_header(); ?>
 
 	}
 
+	function zoomSite(site, marker) {
 
-	function loadMarkers() {
-
-
+	    // ==========================================================================
+	    // If site slug passed in URI, zoom to the site, display modal with info
+    	
+	    //first, make sure the site variable passed is valid!
+    	if (marker){
+    	    	triggerInfoPanel(site);
+    	
+    	    	//center map and zoom in
+    		    map.setCenter(marker.position);
+    	    	map.setZoom(12);
+    	    }
 	}
+
 
 	jQuery(document).ready(function(){
 
+		//check to see if specific site is passed
+		var siteVar = "<?php echo get_query_var( 'site',0 ) ?>"
+		
 		//setup marker definitions
 		var siteMarkers = {};
 		var sitePopups= {};
@@ -465,6 +478,7 @@ get_header(); ?>
 
 		// ================================================================
 		// ADD BUTTONS TO THE MAP FOR CUSTOM NAVIGATION, MARKER DISPLAY TOGGLE
+		// TODO - remove recenter button when geolocation not available
 		
         // Create the DIV to hold the center and zoom to state buttons
         // constructor passing in this DIV.
@@ -509,7 +523,7 @@ get_header(); ?>
 
 		function showLabels(sIW) {
 		    //loop through passed infowindows array, TURN ALL LABELS ON, remove event listeners
-		    console.log('showLabels run');
+		    // console.log('showLabels run');
 		    for (l in sIW) {
 		        sitePopups[ l ].setMap(map);
 
@@ -521,14 +535,13 @@ get_header(); ?>
 
 		function removeLabels() {
 		    //loop through site IDs , TURN LABELS OFF, add event listeners back
-		    console.log('removeLabels run');
 			//clear out mouseout and mouseover listeners
 			siteMouseoverListeners = {};
 			siteMouseoutListeners = {};
-			console.log(siteIds);
+
 		    if (siteIds) {
 				jQuery.each(siteIds, function (i,v){
-					console.log(v);
+
 					//remove site popups
 			    	sitePopups[ v ].setMap(null);
 	
@@ -589,11 +602,18 @@ get_header(); ?>
 
 	            });
 
+	            // If site variable in URI, zoom in to site and display modal
+	            // first, make sure there is a valid marker for the passed variable!
+	            if (siteMarkers[siteVar]) {zoomSite(siteVar, siteMarkers[siteVar]);};
+
 	        }, 
 	        error: function(jqxhr, status, exception) {
 	          console.log(status + " : " + exception);
         	}
         });
+
+
+	
 	});
 </script>
 <?php get_footer(); ?>
