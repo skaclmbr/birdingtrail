@@ -247,6 +247,8 @@ function clearModalPanel () {
     jQuery('#EXTWEBSITE').remove();
     jQuery('#NAVIGATION').remove();
 
+    jQuery('#google-button').remove();
+
 }
 
 /* SEARCH GOOGLE FOR PLACE ID
@@ -359,7 +361,13 @@ function populateGoogleData(place){
   }
 
   //POPULATE GOOGLE LINK - THIS IS REQUIRED TO USE GOOGLE SERVICES
-  if (place['url']) {jQuery('#GOOGLELINK').attr('href',place['url']);};
+    gButton = jQuery('<div/>', {id: 'google-button', class: 'footer-footer-buttons'});
+    gLink = jQuery('<a/>', {id:'GOOGLELINK',href:place['url'],target:'_blank'});
+    gLink.html('<i class="fa fa-google"></i>');
+    gButton.append(gLink);
+
+    jQuery('.modal-footer-footer').append(gButton);
+
 
   //RETRIEVE/DISPLAY PHOTO
   var photos = place.photos;

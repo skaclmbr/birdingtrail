@@ -34,7 +34,8 @@ get_header(); ?>
 <!-- 
 	content for popup box and map container
 	resizes google map container based on viewport size and header, footer heights
-		- see code in initialize below,  
+		- see code in initialize below,
+		- data populated via map.js code
 
 -->
 <main id="map-modal-container" role="main" class="inner map">
@@ -47,7 +48,7 @@ get_header(); ?>
         <div class="container site-modal-header">
 	       <img id="modal-header-image"/>
     	  <div class="modal-site-title row">
-	          <div class="col-10"><h3 class="modal-title text-left" id="NAME"></h3></div><!-- fix font; make smaller on smaller screens? -->
+	          <div class="col-10"><h3 class="modal-title text-left" id="NAME"></h3></div>
 	          <div class="col-2">
 	          	<button type="button" id="close-modal" class="close" data-dismiss="modal">&times;</button><br/>
 	          </div>
@@ -75,10 +76,8 @@ get_header(); ?>
 		  	</div>
 		  </div>
         </div>
-        <!-- ADD SITE PHOTO FULL WIDTH OF MODAL -->
         
         <!-- Modal body -->
-        <!-- ADD LOGO BUTTONS TO OPEN/CLOSE PANELS -->
 
 				<div class="card">
   					<a href="#DESCRIPTION" class="btn btn-primary" data-toggle="collapse">Description</a>
@@ -105,7 +104,7 @@ get_header(); ?>
 			  <div id="facebook-button" class="footer-footer-buttons"> <a id="facebook-share" href="" target="_blank"><i class="fa fa-facebook-square"></i></a></div>
 			  <div id="insta-button" class="footer-footer-buttons"> <a id="insta-share" href="" target="_blank"><i class="fa fa-instagram"></i></a></div>
 			   -->
-			  <div id="google-button" class="footer-footer-buttons" ><a id="GOOGLELINK" href="" target="_blank"><i class="fa fa-google"></i></a></div><!-- be sure to include link to Google Maps Page here -->
+
 	      </div>
         </div>
 	  </div>
