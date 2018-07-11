@@ -717,16 +717,6 @@ button.close {
 
 }
 
-/* NOT NEEDED?
-.modal-title-background {
-  background: linear-gradient(to bottom, rgb(50,50,50, 0.8),rgb(50,50,50, 0));
-  height:8rem;
-  position:absolute;
-  top:0;
-  left:0;
-
-}
-*/
 #close-modal {
   z-index:100;
 }
@@ -772,6 +762,36 @@ button.close {
   padding:0.4rem;
   display:block;
 }
+
+.modal-subheading {
+  padding: 0.5rem;
+  text-align: left;
+  font-style: italic;
+  font-weight:600;
+  color:#ccc;
+  background:#222;
+}
+
+#ebird-badge {
+  float:right;
+  font-weight:400;
+}
+
+/*
+.modal-subsection {
+  margin-top:1rem;
+  margin-bottom:1rem;
+}
+*/
+.modal-subsection-column {
+  font-size:0.9rem;
+}
+
+.site-info {
+  padding:0.8rem;
+  font-size:0.9rem;
+}
+
 /*
  * blog
  */

@@ -79,18 +79,23 @@ get_header(); ?>
         
         <!-- Modal body -->
 
-				<div class="card">
-  					<a href="#DESCRIPTION" class="btn btn-primary" data-toggle="collapse">Description</a>
-  				</div>
-				<div id="DESCRIPTION" class="collapse site-info"></div>
-				<div class="card">
-  					<a href="#SPECIES" class="btn btn-primary" data-toggle="collapse">Species</a>
-  				</div>
-				<div id="SPECIES" class="collapse site-info"></div>
-				<div id="HABITATS-CARD" class="card">
-  					<a href="#HABITATS" class="btn btn-primary" data-toggle="collapse">Habitats</a>
-  				</div>
-				<div id="HABITATS" class="collapse site-info"></div>
+		<div class="card">
+				<a href="#DESCRIPTION" class="btn btn-primary" data-toggle="collapse">Description</a>
+			</div>
+		<div id="DESCRIPTION" class="collapse site-info"></div>
+		<div id="BIRDS-CARD" class="card">
+				<a href="#BIRDS" class="btn btn-primary" data-toggle="collapse">Birds</a>
+			</div>
+		<div id="BIRDS" class="collapse">
+			<div class="modal-subheading"id="modal-subheading-species">Site Specialties</div>
+			<div id="SPECIES" class="modal-subsection site-info"></div>
+			<div class="modal-subheading" id="modal-subheading-sightings">Seen Recently Nearby <a id='ebird-location-link' href='http://ebird.org' target='_blank'><span id='ebird-badge' class='badge badge-success'>from eBird</span></a></div>
+			<div id="SIGHTINGS" class="modal-subsection row"></div>
+		</div>
+		<div id="HABITATS-CARD" class="card">
+				<a href="#HABITATS" class="btn btn-primary" data-toggle="collapse">Habitats</a>
+			</div>
+		<div id="HABITATS" class="collapse site-info"></div>
 
 				<!-- ADD FEATURE LOGOS AS ANOTHER SECTION HERE -->
 
@@ -384,6 +389,9 @@ get_header(); ?>
 
 
 	jQuery(document).ready(function(){
+
+		//refresh species content when clicked
+
 
 		//check to see if specific site is passed
 		var siteVar = "<?php echo get_query_var( 'site',0 ) ?>"

@@ -50,8 +50,9 @@ add_action( 'wp_enqueue_scripts', 'wpbootstrap_scripts_with_jquery' );
 //These functions enable a direct URL to a site on the map
 
 // add `siteslug` to query vars
-// enables the following to pass query variable: ncbirdingtrail/map.php?site=airlie-gardens
+// enables the following to pass query variable: ncbirdingtrail/sites/?site=airlie-gardens
 // NOTE - this adds a custom query variable, the redirection plugin allows for clean URIs to point to this query URI version
+//		example: ncbirdingtrail.org/sites/airlie-gardens => ncbirdingtrail.org/sites/?site=airlie-gardens
 
 add_filter( 'init', 'add_site_query_var' );
 function add_site_query_var()
