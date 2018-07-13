@@ -18,6 +18,8 @@ var sitePlaceId;
 var eBirdId = 'vcsnp5gci7f9';
 var featureFields = ['BOATACCESS', 'BOATLAUNCH','CAMPING','FEE','HANDICAP','HIKING','HUNTING','INTERPRETIVE','PICNIC','RESTROOMS','TRAILMAPS','VIEWING','VISITOR'];
 
+var site_data; //global holder for site data information
+
 function triggerInfoPanel(slug){
     var ncbtData;
     clearModalPanel();
@@ -41,6 +43,7 @@ function triggerInfoPanel(slug){
     //   console.log('jquery when works!');
     // });
     // console.log(slug);
+    console.log('ajax request to get ncbt site data');
     jQuery.ajax({
         type: "POST",
         dataType: "json",
@@ -58,8 +61,9 @@ function triggerInfoPanel(slug){
           // console.log("success triggered");
           // console.log(status);
           // console.log(data);
-
-          populateInfoPanel(data); //commented out for testing
+          site_data = data
+          populateInfoPanel(); //commented out for testing
+          // populateInfoPanel(data); //commented out for testing
           }, 
         error: function(jqxhr, status, exception) {
 /*
@@ -84,7 +88,8 @@ function triggerInfoPanel(slug){
 /* ====================================================
 * This function populates the information into the info panel
 */
-function populateInfoPanel(site_data) {
+// function populateInfoPanel(site_data) {
+function populateInfoPanel() {
     // populate infopanel with returned site data from NCBT Database
     // array with available infopanel headings
 
@@ -240,7 +245,7 @@ function populateInfoPanel(site_data) {
     */
     console.log(site_data);
 
-    //listen for recent sightings button click
+/*    //listen for recent sightings button click
     jQuery("#BIRDS-CARD").click(function(){
 
       if (jQuery('#BIRDS').hasClass('show')){
@@ -248,14 +253,16 @@ function populateInfoPanel(site_data) {
         //jQuery('#SIGHTINGS').empty();
       } else {
         console.log("no show");
+        console.log('modal length: ' + jQuery('.modal-subsection-column-left').length);
         if (!jQuery('.modal-subsection-column').length ) {
           //birds not populated, do it now.
           console.log("run populate sightings");
-          populateSightings(site_data);
+          populateSightings();
+          // populateSightings(site_data);
         }
       }
 
-    });
+    });*/
 
 
 
@@ -360,24 +367,28 @@ function retrievePlaceData (p) {
 *  GET EBIRD DATA
 *  pass either locid or lat/lon, get data back from eBird
 */
-function populateSightings(siteData) {
+function populateSightings() {
+// function populateSightings(site_data) {
   //get information from eBird, populate modal with recent sightings
   console.log('site Data: ');
-  console.log(siteData);
+  console.log(site_data);
   //check to see if location id in database record
-  if (!siteData['LocID']){
-      console.log("searching for location id");
-      locId = getLocID(siteData['LAT'],siteData['LON'], siteData['SNAME']);
-      console.log("location ID: " + locId);
+  if (!site_data['LocID']){
+      // console.log("searching for location id");
+      locId = getLocID(site_data['LAT'],site_data['LON'], site_data['SNAME']);
+      // console.log("location ID: " + locId);
       
-      siteData['LocID'] = locId;
+      site_data['LocID'] = locId;
       //update database code here
 
   }
 
   //update badge link in subsection header
-  if (siteData['LocID']) {
-    jQuery('#ebird-location-link').attr('href', 'https://ebird.org/barchart?r=' + siteData['LocID'] + '&yr=all&m=');
+  if (site_data['LocID']) {
+    jQuery('#ebird-location-link').attr('href', 'https://ebird.org/barchart?r=' + site_data['LocID'] + '&yr=all&m=');
+  } else {
+    jQuery('#ebird-location-link').attr('href', 'https://ebird.org');
+
   }
   
   // retrieve recent sightings, populate modal
@@ -386,53 +397,66 @@ function populateSightings(siteData) {
   // lng == longitude
   // return => json object with list of nearby observations
 
-  var searchDist = 5; //distance from location to search
-  var searchDays = 7; //num of days back to search
+  var searchDist = 30; //distance from location to search
+  // var searchDays = 7; //num of days back to search
   // var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   // var months = ["Jan", "Feb", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
   var settings = {
     "async": true,
     "crossDomain": true,
-    "url": "https://ebird.org/ws2.0/data/obs/geo/recent?lat=" + siteData['LAT'] + "&lng=" + siteData['LON'] + "&dist=" + searchDist,
-    // "url": "https://ebird.org/ws2.0/data/obs/geo/recent?lat=" + siteData['LAT'] + "&lng=" + siteData['LON'] + "&dist=" + searchDist + "&back=" + searchDays,
+    "url": "https://ebird.org/ws2.0/data/obs/geo/recent/notable?lat=" + site_data['LAT'] + "&lng=" + site_data['LON'] + "&dist=" + searchDist, //find notable sightings only
+    // "url": "https://ebird.org/ws2.0/data/obs/geo/recent?lat=" + site_data['LAT'] + "&lng=" + site_data['LON'] + "&dist=" + searchDist,
+    // "url": "https://ebird.org/ws2.0/data/obs/geo/recent?lat=" + site_data['LAT'] + "&lng=" + site_data['LON'] + "&dist=" + searchDist + "&back=" + searchDays,
     "method": "GET",
     "headers": {
       "X-eBirdApiToken": eBirdId
     }
   }
-  jQuery.when(jQuery.ajax(settings)).done(function(r){
-    console.log(r);
-    //make two columns to display bird list
-    birdLeft = jQuery('<div/>', {class:'modal-subsection-column col-6', id:'modal-subsection-column-left'});
-    birdRight = jQuery('<div/>', {class:'modal-subsection-column col-6', id:'modal-subsection-column-right'});
-    jQuery(r).each(function(i,val){
-        jQuery('#modal-subheading-sightings').removeClass('f-hide');
-        // var d = new Date(val.obsDt);
-        birdText = val.comName;
-        // birdText = val.comName + " (" + days[d.getDay()] + ", " + d.getMonth() " )";
-        if (val.locId) {
-          birdURI = 'https://ebird.org/barchart?r=' + val.locId + '&yr=all&m=';
-        } else {
-          birdURI = 'http://www.ebird.org/hotspots';
-          
-        }
-        birdDiv = jQuery ('<div/>', {class: 'bird-sighting'});
-        birdLink = jQuery('<a/>', {class: 'bird-sighting-link', text: birdText, href:birdURI, target: '_blank'});
-        birdDiv.append(birdLink);
 
-        if (isOdd(i)) {
-          birdLeft.append(birdDiv);
-        } else {
-          birdRight.append(birdDiv);
+  jQuery.ajax(settings).done(function(r){
+    console.log(r); //TESTING
+    //make two columns to display bird list
+    var birdLeft = jQuery('<div/>', {class:'modal-subsection-column col-6', id:'modal-subsection-column-left'});
+    var birdRight = jQuery('<div/>', {class:'modal-subsection-column col-6', id:'modal-subsection-column-right'});
+    
+    birdList = []; //array for storing birds seen
+    count = 0; //count how many seen
+
+    jQuery(r).each(function(i,val){
+
+        birdText = val.comName;
+
+        //make sure the list is unique
+        if (birdList.indexOf(birdText)== -1) {
+          count +=1;
+          birdList.push(birdText);
+
+          if (val.locId) {
+            birdURI = 'https://ebird.org/barchart?r=' + val.locId + '&yr=all&m=';
+          } else {
+            birdURI = 'http://www.ebird.org/hotspots';
+            
+          }
+          birdDiv = jQuery ('<div/>', {class: 'bird-sighting'});
+          birdLink = jQuery('<a/>', {class: 'bird-sighting-link', text: birdText, href:birdURI, target: '_blank'});
+          birdDiv.append(birdLink);
+  
+          if (isOdd(count)) {
+            birdLeft.append(birdDiv);
+          } else {
+            birdRight.append(birdDiv);
+          }
         }
     });
-    jQuery('#SIGHTINGS').append(birdLeft);
-    jQuery('#SIGHTINGS').append(birdRight);
 
+    if (count >0) { //make sure at least one bird found, then unhide...
+      jQuery('#modal-subheading-sightings').removeClass('f-hide');
+      jQuery('#SIGHTINGS').append(birdLeft);
+      jQuery('#SIGHTINGS').append(birdRight);
+    }
   });
 
-
-  
 
   /* Location bar chart URI examples:
   *  https://ebird.org/barchart?r=L189480&yr=all&m=
@@ -448,7 +472,7 @@ function isOdd(num){return num %2; }
 
 function getLocID (lat, lng, name) {
   // check ebird for closest location id to site (look for up to 3km away)
-
+  console.log('searching for eBird Location ID');
   var settings = {
     "async": true,
     "crossDomain": true,
@@ -476,6 +500,7 @@ function getLocID (lat, lng, name) {
 
     // console.log("matched " + name + " TO " + mName + " : " + mLocId)
     return mLocId;
+    updateSiteInfo(site_data['SITELUG'],'LocID', mLocId);
   });
 }
 

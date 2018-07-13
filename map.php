@@ -134,6 +134,10 @@ get_header(); ?>
 
 	var currLatLng;
 	var retDistDur;
+	var gmapViewInfo = {};
+	var birdIds = [];
+	var birdPopups = {};
+	var birdMarkers={};
 
 	jQuery('#page-container').attr("padding","0"); //for map page, no margins or padding
 	// Cookies
@@ -215,7 +219,10 @@ get_header(); ?>
 			    });
 		  	};
 		  });
-		};
+		} else {
+			//geolocation failed, disable button
+			
+		}
 	};
 
 	// ===================================================================
@@ -241,12 +248,140 @@ get_header(); ?>
 
 		}, 0);
 	};
+
+
+	function showBirds() {
+		console.log('show birds!');
+
+		//ADD CODE HERE - to check the status of the button (class active) - toggle on/off markers
+
+		if (jQuery('#btn-ebird').hasClass('active')){
+			//button is pushed currently, remove labels
+
+		} else {
+			searchDist = 50;
+			maxResults = 200;
+			backDays = 7;
+			var ctr = map.getCenter();
+
+	 		var settings = {
+			    "async": true,
+			    "crossDomain": true,
+			    "url": "https://ebird.org/ws2.0/data/obs/geo/recent/notable?lat=" + ctr.lat() + "&lng=" + ctr.lng() + "&dist=" + searchDist + "&maxResults=" + maxResults, //find notable sightings only
+			    "method": "GET",
+			    "headers": {
+			      "X-eBirdApiToken": eBirdId
+			    }
+			}
+
+			jQuery.ajax(settings).done(function(r){
+				console.log(r); //TESTING
+			  	//loop through results to place markers
+
+			  	jQuery.each(r, function(index, value){
+			    	//setup variables for each site
+			    	console.log(this);
+			    	var comName = this.comName;
+			    	var sciName = this.sciName;
+			    	var locId = this.locId;
+			    	var birdId = this.speciesCode + this.obsDt + this.lat + this.lon; //combine data to make id
+			    	var lat = parseFloat(this.lat);
+			    	var lng = parseFloat(this.lng);
+			    	birdIds.push(birdId); //use this later to remove points from map
+
+					//create infobox/infowindow, add content
+					var popupContent = document.createElement('div',{id:'pop-bird-' + birdId ,text: comName });
+					var newText = document.createTextNode(comName);
+					popupContent.appendChild(newText);
+					popupContent.setAttribute("id","pop-bird-" + birdId);
+					
+					birdPopups[birdId] = new Popup(birdId,new google.maps.LatLng(lat,lng),popupContent);
+
+					//place marker on map, add listener to open modal with information
+					birdMarkers[birdId] = new google.maps.Marker({position:{lat:lat, lng:lng},icon:birdIcon,map:map});
+					// google.maps.event.addListener(birdMarkers[birdId], "click", function() {}); //do something on click?
+
+		/*			//turns on hover behavior (highlight dot, make label visible) - desktop only
+				siteMouseoverListeners[slug] = google.maps.event.addListener(siteMarkers[slug], "mouseover", function() {siteMarkers[slug].setIcon(highlightIcon); sitePopups[slug].setMap(map); });
+
+				//turns off hover behavior (un-highlight dot, hide label) - desktop only
+				siteMouseoutListeners[slug] = google.maps.event.addListener(siteMarkers[slug], "mouseout", function() {siteMarkers[slug].setIcon(siteIcon); sitePopups[slug].setMap(null);});
+	*/		    
+				});
+			});
+  		}
+/*
+		    jQuery(r).each(function(i,val){
+
+		    birdList = []; //array for storing birds seen
+		    count = 0; //count how many seen
+		        birdText = val.comName;
+
+		        //make sure the list is unique
+		        if (birdList.indexOf(birdText)== -1) {
+		          count +=1;
+		          birdList.push(birdText);
+
+		          if (val.locId) {
+		            birdURI = 'https://ebird.org/barchart?r=' + val.locId + '&yr=all&m=';
+		          } else {
+		            birdURI = 'http://www.ebird.org/hotspots';
+		            
+		          }
+		          birdDiv = jQuery ('<div/>', {class: 'bird-sighting'});
+		          birdLink = jQuery('<a/>', {class: 'bird-sighting-link', text: birdText, href:birdURI, target: '_blank'});
+		          birdDiv.append(birdLink);
+		  
+		          if (isOdd(count)) {
+		            birdLeft.append(birdDiv);
+		          } else {
+		            birdRight.append(birdDiv);
+		          }
+		        }
+		    });
+
+		    if (count >0) { //make sure at least one bird found, then unhide...
+		      jQuery('#modal-subheading-sightings').removeClass('f-hide');
+		      jQuery('#SIGHTINGS').append(birdLeft);
+		      jQuery('#SIGHTINGS').append(birdRight);
+		    }
+*/
+
+	}
+
+/*	// ===================================================================
+	// calculate the a radius (in miles) that would encompass the curren zoom level
+	//NOT SURE NEED TO BOTHER WITH THIS - JUST GET THE MAX DISTANCE AND RESTRICT BY # RECORDS...
+
+	function calcRadius() {
+		var bounds = map.getBounds();
+
+		var center = bounds.getCenter();
+		var ne = bounds.getNorthEast();
+
+		// r = radius of the earth
+		// var r = 3963.0;//mi  
+		var r = 6377.8;//km  
+
+		// Convert lat or lng from decimal degrees into radians (divide by 57.2958)
+		var lat1 = center.lat() / 57.2958; 
+		var lon1 = center.lng() / 57.2958;
+		var lat2 = ne.lat() / 57.2958;
+		var lon2 = ne.lng() / 57.2958;
+
+		// distance = circle radius from center to Northeast corner of bounds
+		var dis = r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
+
+		return dis		
+	}*/
+
 	// ===================================================================
 	// add custom buttons to the map
 	// allows zoom out to state, or zoom to location
 
 	// Create a div to hold the control.
 	function ButtonControl(controlDiv, map) {
+
 		// Set CSS for the control border
 		var controlUI = document.createElement('div');
 		controlUI.className = "btn-group";
@@ -265,9 +400,18 @@ get_header(); ?>
 		stateButton.innerHTML = "<i class='fa fa-search-minus'></i>";
 		controlUI.appendChild(stateButton);
 
+		var birdButton = document.createElement('button');
+		birdButton.className = 'btn btn-light';
+		birdButton.innerHTML = "<i class='fas fa-crow'></i>";
+		birdButton.id = "btn-ebird";
+		birdButton.setAttribute("data-toggle","button");
+		controlUI.appendChild(birdButton);
+
+
 		 // Setup the click event listeners: simply set the map to Chicago.
         centerButton.addEventListener('click', function() {tryGeolocation();});
         stateButton.addEventListener('click', function() {zoomState(map);});
+        birdButton.addEventListener('click', function() {showBirds();});
     }
 
     function zoomState(map){
@@ -398,16 +542,26 @@ get_header(); ?>
 		
 		//setup marker definitions
 		var siteMarkers = {};
+		// var birdMarkers = {};
 		var sitePopups= {};
+		// var birdPopups= {};
 		var siteMouseoverListeners = {};
 		var siteMouseoutListeners = {};
 		var siteLabelListeners = {};
 		var siteIds = []; //array of site slugs
+		// var birdIds = []; //array of eBird marker ids
 
 		var pointOffset = new google.maps.Point(13,13)
 		siteIcon = {
 			path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
 			fillColor: '#365c8b',
+			fillOpacity: .8,
+			strokeWeight: 0,
+			scale:0.25
+			};
+		birdIcon = {
+			path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
+			fillColor: '#4ca800', //eBird Green - olivedrab
 			fillOpacity: .8,
 			strokeWeight: 0,
 			scale:0.25
@@ -448,14 +602,12 @@ get_header(); ?>
 
 		// ================================================================
 		// load listeners
-		//listen for location button click
-		jQuery("#map-location").click(function(){tryGeolocation(false);});
 
 		//add listener to change map size when window changes
 		google.maps.event.addDomListener(window, "resize", function() {setMapHeight();});
 
 		//add listener to recenter map on location
-		jQuery('#center-map').click(tryGeolocation());
+		// jQuery('#center-map').click(tryGeolocation());
 
 		//listen for modal panel close
 		//make sure to clear out fields
@@ -463,7 +615,26 @@ get_header(); ?>
 
 			clearModalPanel(); //on maps.js
 		});
-		
+
+		//listen for recent sightings button click
+	    jQuery("#BIRDS-CARD").click(function(){
+
+	      if (jQuery('#BIRDS').hasClass('show')){
+	        console.log("has show");
+	        //jQuery('#SIGHTINGS').empty();
+	      } else {
+	        console.log("no show");
+	        console.log('modal length: ' + jQuery('.modal-subsection-column-left').length);
+	        if (!jQuery('.modal-subsection-column').length ) {
+	          //birds not populated, do it now.
+	          console.log("run populate sightings");
+	          populateSightings();
+	        }
+	      }
+
+	    });
+
+
 		// ================================================================
 		// DEFINE THE GOOGLE MAP
 

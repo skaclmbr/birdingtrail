@@ -550,13 +550,14 @@ display: inline;
 /* controls where map tool buttons are placed */
 
 #map-button-group {
-  margin-right:10px;
-  margin-top:10px;
+  margin-right:0.5rem;
+  margin-top:0.5rem;
 }
 
 
 #map-button-group i {
-  font-size:1.75rem;
+  font-size:1rem;
+  color:#666;
 }
 /*
 .infoBox {
@@ -777,12 +778,10 @@ button.close {
   font-weight:400;
 }
 
-/*
-.modal-subsection {
-  margin-top:1rem;
-  margin-bottom:1rem;
+.modal-subsection a {
+  text-decoration: underline;
 }
-*/
+
 .modal-subsection-column {
   font-size:0.9rem;
 }

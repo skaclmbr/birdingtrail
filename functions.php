@@ -6,7 +6,8 @@ function wpbootstrap_scripts_with_jquery()
 	//wp_enqueue_script('jquery', get_stylesheet_directory_uri() . '/js/jquery-3.3.1.slim.min.js'); //not sure if needed?
 	wp_enqueue_style('bootstrap', get_stylesheet_directory_uri() . '/bootstrap/css/bootstrap.css');
 	wp_enqueue_style('parent-style', get_stylesheet_directory_uri() . '/style.css',array('bootstrap'));
-	wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+	// wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+	wp_enqueue_style('font-awesome', get_stylesheet_directory_uri() . '/css/css/all.css');
 	//wp_enqueue_style('bootstrap-resp', get_stylesheet_directory_uri() . '/bootstrap/css/bootstrap-responsive.css');
 
 	// Register the script like this for a theme:
