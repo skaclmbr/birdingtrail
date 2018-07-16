@@ -434,11 +434,7 @@ function populateSightings() {
   */
 
 
-<<<<<<< HEAD
 } //end populateSightings
-=======
-} //end populateinfopanel
->>>>>>> master
 
 function isOdd(num){return num %2; }
 
