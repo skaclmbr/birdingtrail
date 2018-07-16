@@ -85,11 +85,11 @@ function triggerInfoPanel(slug){
 };
 
 
+function populateInfoPanel() {
+// function populateInfoPanel(site_data) {
 /* ====================================================
 * This function populates the information into the info panel
 */
-// function populateInfoPanel(site_data) {
-function populateInfoPanel() {
     // populate infopanel with returned site data from NCBT Database
     // array with available infopanel headings
 
@@ -240,39 +240,13 @@ function populateInfoPanel() {
     }
 
 
-    /* ========================================================================================
-    *  POPULATE eBIRD DATA
-    */
-    console.log(site_data);
+} //end populateInfoPanel
 
-/*    //listen for recent sightings button click
-    jQuery("#BIRDS-CARD").click(function(){
-
-      if (jQuery('#BIRDS').hasClass('show')){
-        console.log("has show");
-        //jQuery('#SIGHTINGS').empty();
-      } else {
-        console.log("no show");
-        console.log('modal length: ' + jQuery('.modal-subsection-column-left').length);
-        if (!jQuery('.modal-subsection-column').length ) {
-          //birds not populated, do it now.
-          console.log("run populate sightings");
-          populateSightings();
-          // populateSightings(site_data);
-        }
-      }
-
-    });*/
-
-
-
-}
-
+function clearModalPanel () {
 /* 
 Reset modal panel to original settings
 Clear out data and collapse all elements
 */
-function clearModalPanel () {
     //remove all "show" classes
     // console.log('clear modal run');
     jQuery(".modal-content.show").removeClass("show");
@@ -308,8 +282,9 @@ function clearModalPanel () {
     //remove google link button at bottom
     jQuery('#google-button').remove();
 
-}
+} //end clearModalPanel
 
+function retrievePlaceId(placeName, slug, location, rPID){
 /* SEARCH GOOGLE FOR PLACE ID
 Check if Place ID exists from database,
     if not, retrieve and populate database
@@ -317,7 +292,6 @@ Check if Place ID exists from database,
 Then, retrieve place data from Google (hours, photos, etc. ) 
 https://developers.google.com/maps/documentation/javascript/places#placeid
 */
-function retrievePlaceId(placeName, slug, location, rPID){
     /* code here to retrieve place ID from Google using Place Name */
     var request = {
         location: location,
@@ -340,10 +314,10 @@ function retrievePlaceId(placeName, slug, location, rPID){
     
     pid = returnPID;
     });
-};
+} //end retrievePlaceId
 
-// RETRIEVE GOOGLE PLACE INFORMAION
 function retrievePlaceData (p) {
+// RETRIEVE GOOGLE PLACE INFORMAION
     //pass place id, get data from Google
     // console.log('retrieve data: ' + p);
 
@@ -360,14 +334,14 @@ function retrievePlaceData (p) {
         return null;
       }
     });
-}
+} //end retrievePlaceData
 
 
+function populateSightings() {
 /* ====================================================================
 *  GET EBIRD DATA
 *  pass either locid or lat/lon, get data back from eBird
 */
-function populateSightings() {
 // function populateSightings(site_data) {
   //get information from eBird, populate modal with recent sightings
   console.log('site Data: ');
@@ -391,12 +365,6 @@ function populateSightings() {
 
   }
   
-  // retrieve recent sightings, populate modal
-  //input location info and type
-  // lat == latitude
-  // lng == longitude
-  // return => json object with list of nearby observations
-
   var searchDist = 30; //distance from location to search
   // var searchDays = 7; //num of days back to search
   // var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -448,14 +416,14 @@ function populateSightings() {
             birdRight.append(birdDiv);
           }
         }
-    });
+    }); //end loop through eBird response
 
     if (count >0) { //make sure at least one bird found, then unhide...
       jQuery('#modal-subheading-sightings').removeClass('f-hide');
       jQuery('#SIGHTINGS').append(birdLeft);
       jQuery('#SIGHTINGS').append(birdRight);
     }
-  });
+  }); //end eBird ajax request
 
 
   /* Location bar chart URI examples:
@@ -466,7 +434,7 @@ function populateSightings() {
   */
 
 
-}
+} //end populateSightings
 
 function isOdd(num){return num %2; }
 
@@ -496,13 +464,13 @@ function getLocID (lat, lng, name) {
         mName = response[i].locName;
         mLocId = response[i].locId;
       }
-    }
+    } //end loop through ajax response
 
     // console.log("matched " + name + " TO " + mName + " : " + mLocId)
     return mLocId;
     updateSiteInfo(site_data['SITELUG'],'LocID', mLocId);
-  });
-}
+  }); //end eBird ajax request
+} //end getLocID
 
 /*
 function getEbirdNearby (lat,lng) {
@@ -547,12 +515,10 @@ function getEbirdNearby (lat,lng) {
 */
 
 
-
+function populateGoogleData(place){
 /* POPULATE MODAL
 Populate the Modal with info from Google Place API
 */
-
-function populateGoogleData(place){
   // console.log(place);
   //HOURS
 
@@ -604,13 +570,13 @@ function populateGoogleData(place){
       jQuery('#modal-header-image').css('clip','rect(0px, ' + mWidth + 'px,' + mHeight + ',0px)');
   }
 
-}
+} //end populateGoogleData
 
 
+function updateSiteInfo(slug, f, d) {
 /* =====================================================================
 * UPDATE back end database with parameters passed
 */
-function updateSiteInfo(slug, f, d) {
     /* 
     slug = SITESLUG
     f = Field to be updated
@@ -633,15 +599,13 @@ function updateSiteInfo(slug, f, d) {
         error: function(jqxhr, status, exception) {
         }
     });
-};
+} //end updateSiteInfo
 
 
-
+function mapsSelector(gLatLng) {
 /* =====================================================================
 * determines if the platform is apple or android, provides nav link appropriately
 */
-
-function mapsSelector(gLatLng) {
   //Pass navigator platform, lat lng in google format
   //link format - https://www.google.com/maps/dir/22.7683707,-99.4103449/35.6805556,-78.6275/@24.0908076,-102.5559874,6.06z
   // link with just destination location - baseUrl = "://maps.google.com/maps?daddr=" + gLatLng.lat() + "," + gLatLng.lng()+ "&amp;ll=";
@@ -655,14 +619,13 @@ function mapsSelector(gLatLng) {
     return "maps" + baseUrl;
 else /* else use Google */
     return "https" + baseUrl;
-}
+} //end mapSelector
 
+function stringMatch (s1,s2){
 /* ====================================================
 * calculates the closeness of two strings - larger values are closer matches
 * counts the number of matching words
 */
-
-function stringMatch (s1,s2){
   a1 = s1.split(" ");
   mVal = 0
 
@@ -671,7 +634,7 @@ function stringMatch (s1,s2){
   }
 
   return mVal;
-}
+} //end stringMatch
 
 /* ====================================================
 * This variable defines the colors and formatting of the map

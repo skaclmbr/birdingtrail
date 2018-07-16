@@ -247,10 +247,11 @@ get_header(); ?>
 			 jQuery("#map-modal-container").css("height",mHeight); //set map canvas to new dimensions (window - footer + header);
 
 		}, 0);
-	};
+	} //end setMapHeight
 
 
 	function showBirds() {
+		//this function adds recent eBird records to the map
 		console.log('show birds!');
 
 		//ADD CODE HERE - to check the status of the button (class active) - toggle on/off markers
@@ -309,78 +310,16 @@ get_header(); ?>
 	*/		    
 				});
 			});
-  		}
-/*
-		    jQuery(r).each(function(i,val){
+  		} //end else
 
-		    birdList = []; //array for storing birds seen
-		    count = 0; //count how many seen
-		        birdText = val.comName;
+	} //end showBirds
 
-		        //make sure the list is unique
-		        if (birdList.indexOf(birdText)== -1) {
-		          count +=1;
-		          birdList.push(birdText);
-
-		          if (val.locId) {
-		            birdURI = 'https://ebird.org/barchart?r=' + val.locId + '&yr=all&m=';
-		          } else {
-		            birdURI = 'http://www.ebird.org/hotspots';
-		            
-		          }
-		          birdDiv = jQuery ('<div/>', {class: 'bird-sighting'});
-		          birdLink = jQuery('<a/>', {class: 'bird-sighting-link', text: birdText, href:birdURI, target: '_blank'});
-		          birdDiv.append(birdLink);
-		  
-		          if (isOdd(count)) {
-		            birdLeft.append(birdDiv);
-		          } else {
-		            birdRight.append(birdDiv);
-		          }
-		        }
-		    });
-
-		    if (count >0) { //make sure at least one bird found, then unhide...
-		      jQuery('#modal-subheading-sightings').removeClass('f-hide');
-		      jQuery('#SIGHTINGS').append(birdLeft);
-		      jQuery('#SIGHTINGS').append(birdRight);
-		    }
-*/
-
-	}
-
-/*	// ===================================================================
-	// calculate the a radius (in miles) that would encompass the curren zoom level
-	//NOT SURE NEED TO BOTHER WITH THIS - JUST GET THE MAX DISTANCE AND RESTRICT BY # RECORDS...
-
-	function calcRadius() {
-		var bounds = map.getBounds();
-
-		var center = bounds.getCenter();
-		var ne = bounds.getNorthEast();
-
-		// r = radius of the earth
-		// var r = 3963.0;//mi  
-		var r = 6377.8;//km  
-
-		// Convert lat or lng from decimal degrees into radians (divide by 57.2958)
-		var lat1 = center.lat() / 57.2958; 
-		var lon1 = center.lng() / 57.2958;
-		var lat2 = ne.lat() / 57.2958;
-		var lon2 = ne.lng() / 57.2958;
-
-		// distance = circle radius from center to Northeast corner of bounds
-		var dis = r * Math.acos(Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1));
-
-		return dis		
-	}*/
-
-	// ===================================================================
-	// add custom buttons to the map
-	// allows zoom out to state, or zoom to location
 
 	// Create a div to hold the control.
 	function ButtonControl(controlDiv, map) {
+	// ===================================================================
+	// add custom buttons to the map
+	// allows zoom out to state, or zoom to location
 
 		// Set CSS for the control border
 		var controlUI = document.createElement('div');
@@ -400,18 +339,23 @@ get_header(); ?>
 		stateButton.innerHTML = "<i class='fa fa-search-minus'></i>";
 		controlUI.appendChild(stateButton);
 
+
+		// button to display birds
+		// disable for now
+/*
 		var birdButton = document.createElement('button');
 		birdButton.className = 'btn btn-light';
 		birdButton.innerHTML = "<i class='fas fa-crow'></i>";
 		birdButton.id = "btn-ebird";
 		birdButton.setAttribute("data-toggle","button");
 		controlUI.appendChild(birdButton);
-
+*/
 
 		 // Setup the click event listeners: simply set the map to Chicago.
         centerButton.addEventListener('click', function() {tryGeolocation();});
         stateButton.addEventListener('click', function() {zoomState(map);});
-        birdButton.addEventListener('click', function() {showBirds();});
+        // DISABLE for now
+        // birdButton.addEventListener('click', function() {showBirds();});
     }
 
     function zoomState(map){
