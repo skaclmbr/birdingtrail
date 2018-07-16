@@ -442,7 +442,7 @@ function populateSightings(siteData) {
   */
 
 
-}
+} //end populateinfopanel
 
 function isOdd(num){return num %2; }
 
