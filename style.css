@@ -88,7 +88,7 @@ img .aligncenter {
 
 /* =====================================================
  * Header
- *	added wp css tags to bootstrap nav links (.menu-item tags) - dunno if this will mess with other menus though!
+ *  added wp css tags to bootstrap nav links (.menu-item tags) - dunno if this will mess with other menus though!
  */
 
 /* temporarily hide header logo */
@@ -113,7 +113,7 @@ img .header_logo {
 .masthead.inner {
   padding-left:1.5rem;
   padding-right:1.5rem;
-	
+  
 }
 .inner {
   text-align:center;
@@ -122,7 +122,7 @@ img .header_logo {
   justify-content:flex-end;
 }
 .menu-item a:hover {
-	text-decoration:none;
+  text-decoration:none;
 }
 .menu-item,
 .nav-masthead .nav-link {
@@ -154,7 +154,7 @@ img .header_logo {
 /* logo  or text on front page*/
 .masthead-brand {
   display:inline-flex;
-	justify-content:flex-start; /*float left*/
+  justify-content:flex-start; /*float left*/
   padding-top:0rem;
   padding-bottom:0rem;
   pading-left:15px;
@@ -164,7 +164,7 @@ img .header_logo {
 
 /*contains menu items */
 .menu-main-container {
-	justify-content:flex-end;
+  justify-content:flex-end;
   width:auto;
 }
 
@@ -174,16 +174,16 @@ img .header_logo {
     justify-content:center;
     flex-direction:column;
   }
-	.masthead-brand {
+  .masthead-brand {
     justify-content:center;
-	}
-	
+  }
+  
   .nav-masthead {
     justify-content:center;
   }
-	.menu-main-container {
+  .menu-main-container {
     justify-content:center;
-	}
+  }
 }
 
 /* =====================================================
@@ -463,6 +463,15 @@ display: inline;
  */
 .page-title {
   text-align: Center;
+}
+
+/* =====================================================
+ * Blog Category Page
+ *	
+ */
+
+.card-columns {
+  margin: 0rem 1rem;
 }
 
 /* =====================================================
