@@ -370,6 +370,7 @@ function populateSightings() {
   // var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   // var months = ["Jan", "Feb", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+  console.log("https://ebird.org/ws2.0/data/obs/geo/recent/notable?lat=" + site_data['LAT'] + "&lng=" + site_data['LON'] + "&dist=" + searchDist);
   var settings = {
     "async": true,
     "crossDomain": true,
@@ -401,13 +402,21 @@ function populateSightings() {
           birdList.push(birdText);
 
           if (val.locId) {
+/*          Tried to make links more relevant, but must be a separate ajax call...            
+            obsDate = String(val.obsDt);
+            console.log(val.locId);
+            console.log(obsDate);
+            console.log(obsDate.substring(0,4));
+            birdURI = 'https://ebird.org/ws2.0/product/lists/' + val.locId + '/' + obsDate.substring(0,4) + '/' + obsDate.substring(5,7) + '/' + obsDate.substring(8,10) + '/?maxResults=10';
+*/
+
             birdURI = 'https://ebird.org/barchart?r=' + val.locId + '&yr=all&m=';
           } else {
             birdURI = 'http://www.ebird.org/hotspots';
             
           }
           birdDiv = jQuery ('<div/>', {class: 'bird-sighting'});
-          birdLink = jQuery('<a/>', {class: 'bird-sighting-link', text: birdText, href:birdURI, target: '_blank'});
+          birdLink = jQuery('<a/>', {class: 'bird-sighting-link', text: birdText, href:birdURI,title:val.locName, target: '_blank'});
           birdDiv.append(birdLink);
   
           if (isOdd(count)) {

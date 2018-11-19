@@ -46,6 +46,16 @@ function wpbootstrap_scripts_with_jquery()
 }
 add_action( 'wp_enqueue_scripts', 'wpbootstrap_scripts_with_jquery' );
 
+//==============================================================================
+//This allows use of svg files
+function add_file_types_to_uploads($file_types){
+	$new_filetypes = array();
+	$new_filetypes['svg'] = 'image/svg+xml';
+	$file_types = array_merge($file_types, $new_filetypes );
+	return $file_types;
+}
+add_action('upload_mimes', 'add_file_types_to_uploads');
+
 
 //==============================================================================
 //These functions enable a direct URL to a site on the map
@@ -65,6 +75,9 @@ function add_site_query_var()
 
 //==============================================================================
 //These functions feed NCBT or BFB data to a map page
+
+//FUTURE: add table creation/functionality to WP database (rather than separately)
+//  - https://deliciousbrains.com/creating-custom-table-php-wordpress/
 
 
 //Adds ajaxurl variable to JS on pages, used in ajax calls

@@ -32,7 +32,7 @@ get_header(); ?>
 		<div class="row row-pad">
 			<div class="col center-block fp-topic"><a href="/birdwatching"><i class="fp-topic-icon fa fa-binoculars fa-2x"></i></a><p class="fp-label">Birdwatching</p></div>
 			<div class="col center-block fp-topic"><a href="/economy"><i class="fp-topic-icon fa fa-usd fa-2x"></i></a><p class="fp-label">Economy</p></div>
-			<div class="col center-block fp-topic"><a href="/education"><i class="fp-topic-icon fa fa-leaf fa-2x"></i></a><p class="fp-label">Conservation</p></div>
+			<div class="col center-block fp-topic"><a href="/conseration"><i class="fp-topic-icon fa fa-leaf fa-2x"></i></a><p class="fp-label">Conservation</p></div>
 		</div>
 	</div>
 </main>
