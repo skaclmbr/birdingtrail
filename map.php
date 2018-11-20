@@ -112,6 +112,9 @@ get_header(); ?>
 			   -->
 
 	      </div>
+	      <div id="w3w-info" class="modal-footer-row w3w vcenter">
+			<a href="https://www.what3words.com" id="w3w-link" target="_blank"><img src="<?php  echo get_template_directory_uri()  . '/img/w3w.svg';?>" id="w3w" class="w3w-img" alt="What3Words"/><span id="w3w-address"></span></a>
+		  </div>
         </div>
 	  </div>
     </div>
@@ -480,6 +483,9 @@ get_header(); ?>
 
 		//refresh species content when clicked
 
+		//what3words key
+		w3w_key = 'JBM1JF04'
+
 
 		//check to see if specific site is passed
 		var siteVar = "<?php echo get_query_var( 'site',0 ) ?>"
@@ -641,9 +647,55 @@ get_header(); ?>
 		    	removeLabels(); // turn all labels off
 		    	// loadMouseListeners(); //reload mouseout, mouseover event listeners (hover to display labels)
 		    } 
-	    	currZoom = newZoom;
-		});
 
+/*	    	
+		    else if (newZoom>15){
+
+				// ==================================================================
+				//NOT WORKING!!!
+		    	//add what3words grid to map
+		    	// What3words key JBM1JF04
+		    	//retrieve GeoJSON
+				tempbounds = map.getBounds();
+		    	console.log(tempbounds);
+		    	w3wbounds = tempbounds.l.j + ',' + tempbounds.j.j + ',' + tempbounds.l.l + ',' + tempbounds.j.l;
+		    	console.log(encodeURI(w3wbounds));
+
+		    	//TESTING COORDS
+		    	//w3wbounds = '35.548841081608884,-79.29510151210934,36.11665367734053,-78.04540668789059'
+
+		    	//w3wgriduri='https://api.what3words/com/v2/grid?bbox=' + map.getBounds() + '&format=geojson&key=' + w3w_key //PRODUCTION
+		    	w3wgriduri=encodeURI('https://api.what3words.com/v2/grid?bbox=' + w3wbounds + '&callback=jsonp&format=geojson&key=' + w3w_key); //TESTING
+		    	//w3wgriduri = 'https://api.what3words.com/v2/grid?bbox=52.208867,0.117540,52.207988,0.116126&format=json&key=' + w3w_key;
+		    	console.log(w3wgriduri);
+
+		    	w3wgjson = '';
+
+		    	var w3wsettings = {
+			        "async": true,
+			        "crossDomain": true,
+			        "method": "GET",
+			        "url": w3wgriduri, //url for what3words api, with dimensions of the current map
+			        "headers": {}
+			    };
+			    
+			    jQuery.ajax(w3wsettings).done(function(response){
+			    	console.log(jsonp);
+			    	console.log(response);
+			    	map.data.loadGeoJson(response);
+
+			    });	
+		    }
+	*/	    	
+	    	currZoom = newZoom;
+
+		});
+/*
+		function loadW3W(gj){
+	    	map.data.loadGeoJson(gj);
+
+		};
+*/
 		function showLabels(sIW) {
 		    //loop through passed infowindows array, TURN ALL LABELS ON, remove event listeners
 		    // console.log('showLabels run');

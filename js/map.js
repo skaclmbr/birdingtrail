@@ -239,8 +239,58 @@ function populateInfoPanel() {
 
     }
 
+    console.log('about to get w3w address...');
+    siteW3wAddress = site_data['WHAT3WORDS']
+    if (siteW3wAddress && siteW3wAddress.length>0) {
+      console.log("W3W found in db")
+      populateW3wAddress(siteW3wAddress);
+    } else {
+      //database field is empty, lookup and populate
+      console.log('database field is empty, lookup and populate');
+      getW3WAddress(siteLatLng);
+    }
+
 
 } //end populateInfoPanel
+function populateW3wAddress(words){
+    //console.log("adding w3w data to modal - " + words);
+    jQuery("#w3w-info").css('display','block');
+    jQuery("#w3w-address").text(words);
+    jQuery("#w3w-link").attr("href","https://w3w.co/" + words);
+
+};
+function getW3WAddress (coords){
+    /* WHAT3WORDS link and info
+    Get what3 words address from lat/long
+    ADD TO DATABASE!!!!
+    Eventually could create a large scale map of the site, with W3W addresses for POIs
+    */
+    // What3words key JBM1JF04
+    //retrieve GeoJSON
+    //console.log('get w3w address run...')
+    
+    w3wrevaddruri=encodeURI('https://api.what3words.com/v2/reverse?coords=' + coords.lat() + ',' + coords.lng() + '&lang=en&display=full&format=json&key=' + w3w_key); //TESTING
+   //console.log(coords);
+    //console.log(w3wrevaddruri);
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": w3wrevaddruri,
+      "method": "GET",
+      "headers": {}
+    }
+
+    jQuery.ajax(settings).done(function (response) {
+      //console.log(response);
+      populateW3wAddress(response.words);
+      updateSiteInfo(site_data['SITESLUG'],'WHAT3WORDS',response.words);
+
+
+    });
+
+
+  };
+
 
 function clearModalPanel () {
 /* 
@@ -281,6 +331,11 @@ Clear out data and collapse all elements
 
     //remove google link button at bottom
     jQuery('#google-button').remove();
+
+    //remove W3W info
+    jQuery('#w3w-info').css('display','none')
+    jQuery('#w3w-link').attr('href','http://www.what3words.com');
+    jQuery('#w3w-address').text('');
 
 } //end clearModalPanel
 
@@ -592,6 +647,7 @@ function updateSiteInfo(slug, f, d) {
     d = Data to update field to
     FUTURE - enable field array and data array, so that multiple fields can be updated 
     */
+    //console.log("updating database for " + slug + " field: " + f + " data: " + d);
 
     data = jQuery.ajax ({
         type:"POST",

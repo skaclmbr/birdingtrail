@@ -813,6 +813,30 @@ button.close {
   padding:0.8rem;
   font-size:0.9rem;
 }
+/*
+ * What3Words formatting
+ */
+
+/* w3w footer div class */
+#w3w {
+  height:0.9rem;
+}
+.w3w-info {
+  vertical-align:center;
+  height:3rem;
+}
+
+#w3w-link:hover{
+  text-decoration:none;
+}
+
+/* w3w address text */
+
+#w3w-address{
+  font-family:'Source Sans Pro', sans-serif;
+  font-size: 0.6rem;
+  padding-left:0.2rem;
+}
 
 /*
  * blog

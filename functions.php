@@ -18,6 +18,8 @@ function wpbootstrap_scripts_with_jquery()
 	//google fonts
 	wp_register_style('google_fonts','https://fonts.googleapis.com/css?family=Pacifico',array(),null);
 	wp_enqueue_style('google_fonts');
+	wp_register_style('google_fonts2','https://fonts.googleapis.com/css?family=Source+Sans+Pro',array(),null);
+	wp_enqueue_style('google_fonts2');
 
 	if (is_page() || is_single())
 	{
