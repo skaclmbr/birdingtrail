@@ -37,6 +37,19 @@ a:hover {
   border: .05rem solid #fff;
 }
 
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus {
+/*
+  border: .05rem solid #fff;
+  color: #333;
+  text-shadow: none; /* Prevent inheritance from `body` */
+
+  background-color: #365c8b;
+  border: .05rem solid #365c8b;
+
+}
+
 
 /* =====================================================
  * Base structure
@@ -481,6 +494,8 @@ display: inline;
  */
 
 .card-columns {
+  margin-left:auto
+  margin-right:auto;
   margin: 0rem 1rem;
 }
 

@@ -35,9 +35,12 @@ function wpbootstrap_scripts_with_jquery()
 				//get_template_part('page-templates/ncbt','dbconnect');
 				//wp_enqueue_script('jquery-mobile', get_stylesheet_directory_uri() . '/js/jquery.mobile-1.4.5.min.js', array(), null, true); //enables infopanel appear/disappear - note can custom create files needed for theme desired on website - would reduce download time
 				wp_enqueue_script('ncbt-google-map', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC1D62u_pN2PRUT6gCBkfZoZXiVU1F4Vxk&v=3&libraries=places'); //old key, enable place id retrieval
+				//NEW API KEY 12/3/18 - AIzaSyDHGo3qFRpz1BGcH6zGcNyqWC6FB3C9Q4g
+				//OLD API KEY 12/3/18 - AIzaSyC1D62u_pN2PRUT6gCBkfZoZXiVU1F4Vxk
 				// wp_enqueue_script('infobox', get_stylesheet_directory_uri() . '/js/infobox.js', array('jquery')); //not needed
 				wp_enqueue_script('ncbt_map', get_stylesheet_directory_uri() . '/js/map.js');
 				//wp_enqueue_style('ncbt-map-style', get_stylesheet_directory_uri() . '/map.css');
+				wp_enqueue_script('ncbt-what3words', get_stylesheet_directory_uri() . '/js/w3w/dist/W3W.Geocoder.min.js'); //What3Words Javascript wrapper
 
 				break;
 			case 'blog': //this doesn't seem to be triggered - CONSIDER REMOVING
@@ -97,6 +100,8 @@ add_action( 'wp_ajax_get_ncbt_data', 'get_ncbt_data' );
 add_action( 'wp_ajax_nopriv_get_ncbt_data', 'get_ncbt_data' );
 
 function get_ncbt_data() {
+	//=========================================================================
+	//THIS SHOULD BECOME OBSOLETE EVENTUALLY - USE ONLY TRAILMGMT PLUGIN TABLES
 
 	if(!isset($_POST['dbrequest'])) {
 		echo json_encode(array('ncbt_data_success'=>'response_missing'));

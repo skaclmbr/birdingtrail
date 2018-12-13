@@ -49,19 +49,26 @@ function triggerInfoPanel(slug){
         dataType: "json",
         url: ajaxurl, //url for WP ajax php file, var def added to header in functions.php
         data: {
-            'action': 'get_ncbt_data', //server side function
+            /* Retrieve data from external DB */
+            'action': 'get_trailmgmt_data', //server side function
+            //'action': 'get_ncbt_data', //server side function
             'dbrequest': 'site_detail', //request type
+            
+            /* FIX THIS!!!!!
+            //get data from trailmgmt plugin table
+            'dbrequest': 'site_detail', //request type
+            */
             // 'slug': 'airlie-gardens',
             // 'dbrequest': 'test', //TESTING
             // 'siteslug' : 'airlie-gardens' //identifying data for the site
-            'slug' : slug //identifying data for the site - for some reason this doesn't work if passed variable is 'siteslug'
+            'siteslug' : slug //identifying data for the site - for some reason this doesn't work if passed variable is 'siteslug'
         },
         success: function(data, status) {
           
           // console.log("success triggered");
           // console.log(status);
           // console.log(data);
-          site_data = data
+          site_data = data;
           populateInfoPanel(); //commented out for testing
           // populateInfoPanel(data); //commented out for testing
           }, 
@@ -239,15 +246,37 @@ function populateInfoPanel() {
 
     }
 
-    console.log('about to get w3w address...');
-    siteW3wAddress = site_data['WHAT3WORDS']
-    if (siteW3wAddress && siteW3wAddress.length>0) {
+    //console.log('about to get w3w address...');
+    siteW3wWords = site_data['WHAT3WORDS']
+    if (siteW3wWords && siteW3wWords.length>0) {
       console.log("W3W found in db")
-      populateW3wAddress(siteW3wAddress);
+      populateW3wAddress(siteW3wWords);
     } else {
       //database field is empty, lookup and populate
       console.log('database field is empty, lookup and populate');
-      getW3WAddress(siteLatLng);
+      //getW3WAddress(siteLatLng);
+      var w3w_options = {
+        key:'JBM1JF04',
+        lang:'en'
+      };
+
+      w3w = new W3W.Geocoder(w3w_options);
+      var callback = {
+          onSuccess: function(data) {
+              console.log(JSON.stringify(data));
+              populateW3wAddress(data.words);
+              updateSiteInfo(site_data['SITESLUG'],'WHAT3WORDS',data.words);
+          },
+          onFailure: function(data) {
+              console.log(JSON.stringify(data));
+          }
+      };
+
+      var params = {
+          coords: [siteLatLng.lat(), siteLatLng.lng()]
+      };
+
+      w3w.reverse(params, callback);
     }
 
 
@@ -259,6 +288,8 @@ function populateW3wAddress(words){
     jQuery("#w3w-link").attr("href","https://w3w.co/" + words);
 
 };
+
+
 function getW3WAddress (coords){
     /* WHAT3WORDS link and info
     Get what3 words address from lat/long

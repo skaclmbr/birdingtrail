@@ -60,19 +60,19 @@ get_header(); ?>
           </div>
           <div class="modal-header-features row">
           	<div class="col-12">
-					<img src="<?php  echo get_template_directory_uri()  . '/img/BOATACCESS.png';?>" id="BOATACCESS" class="feature-img f-hide" alt="Boat Access"/>
-					<img src="<?php  echo get_template_directory_uri()  . '/img/BOATLAUNCH.png';?>" id="BOATLAUNCH" class="feature-img" alt="Boat Launch"/>
-					<img src="<?php  echo get_template_directory_uri()  . '/img/CAMPING.png';?>" id="CAMPING" class="feature-img f-hide" alt="Camping"/>
-					<img src="<?php  echo get_template_directory_uri()  . '/img/FEE.png';?>" id="FEE" class="feature-img" alt="Fee"/>
-					<img src="<?php  echo get_template_directory_uri()  . '/img/HANDICAP.png';?>" id="HANDICAP" class="feature-img f-hide" atl="Handicap"/>
-					<img src="<?php  echo get_template_directory_uri()  . '/img/HIKING.png';?>" id="HIKING" class="feature-img f-hide" alt="Hiking"/>
-					<img src="<?php  echo get_template_directory_uri()  . '/img/HUNTING.png';?>" id="HUNTING" class="feature-img f-hide" alt="Hunting"/>
-					<img src="<?php  echo get_template_directory_uri()  . '/img/INTERPRETIVE.png';?>" id="INTERPRETIVE" class="feature-img f-hide" alt="Interpretive"/>
-					<img src="<?php  echo get_template_directory_uri()  . '/img/PICNIC.png';?>" id="PICNIC" class="feature-img f-hide" alt="Picnic Facilities"/>
-					<img src="<?php  echo get_template_directory_uri()  . '/img/RESTROOMS.png';?>" id="RESTROOMS" class="feature-img f-hide" alt="Restrooms"/>
-					<img src="<?php  echo get_template_directory_uri()  . '/img/TRAILMAPS.png';?>" id="TRAILMAPS" class="feature-img f-hide" alt="Trail Maps"/>
-					<img src="<?php  echo get_template_directory_uri()  . '/img/VIEWING.png';?>" id="VIEWING" class="feature-img f-hide" alt="Wildlife Viewing"/>
-					<img src="<?php  echo get_template_directory_uri()  . '/img/VISITOR.png';?>" id="VISITOR" class="feature-img f-hide" alt="Visitor Services"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/BOATACCESS.png';?>" id="BOATACCESS" title="Boating Access" class="feature-img f-hide" alt="Boat Access"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/BOATLAUNCH.png';?>" id="BOATLAUNCH" title="Boating Launch" class="feature-img" alt="Boat Launch"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/CAMPING.png';?>" id="CAMPING" title="Camping" class="feature-img f-hide" alt="Camping"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/FEE.png';?>" id="FEE" title="Fee" class="feature-img" alt="Fee"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/HANDICAP.png';?>" id="HANDICAP" title="Handicap Accessbile" class="feature-img f-hide" atl="Handicap"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/HIKING.png';?>" id="HIKING" title="Hiking" class="feature-img f-hide" alt="Hiking"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/HUNTING.png';?>" id="HUNTING" title="Hunting" class="feature-img f-hide" alt="Hunting"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/INTERPRETIVE.png';?>" title="Interpretive Resources" id="INTERPRETIVE" class="feature-img f-hide" alt="Interpretive"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/PICNIC.png';?>" id="PICNIC" title="Picnic Facilities" class="feature-img f-hide" alt="Picnic Facilities"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/RESTROOMS.png';?>" id="RESTROOMS" title="Public Restrooms" class="feature-img f-hide" alt="Restrooms"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/TRAILMAPS.png';?>" id="TRAILMAPS" title="Trail Maps Available" class="feature-img f-hide" alt="Trail Maps"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/VIEWING.png';?>" id="VIEWING" title="Viewing Platforms" class="feature-img f-hide" alt="Wildlife Viewing"/>
+					<img src="<?php  echo get_template_directory_uri()  . '/img/VISITOR.png';?>" id="VISITOR" title="Visitor Center" class="feature-img f-hide" alt="Visitor Services"/>
 		  	</div>
 		  </div>
         </div>
@@ -142,6 +142,7 @@ get_header(); ?>
 	var birdPopups = {};
 	var birdMarkers={};
 
+
 	jQuery('#page-container').attr("padding","0"); //for map page, no margins or padding
 	// Cookies
 	// add cookie to see if user has allowed geolocation previously
@@ -205,6 +206,7 @@ get_header(); ?>
 			    //Post location data to Visit Table
 			    //COULD ADD CODE TO PARSE navigator.userAgent and deterimine if mobile or not, other factors jermain to location
 			    console.log("logging visit location");
+/*
 			    data = jQuery.ajax({
 			        type: "POST",
 			        url: ajaxurl, //url for WP ajax php file, var def added to header in functions.php
@@ -217,7 +219,24 @@ get_header(); ?>
 			            'lat' : position.coords.latitude, //latitude
 			            'lon' : position.coords.longitude //longitude
 			        },
-					success: function(data) {
+*/
+
+				//trailmgmt plugin version
+			    data = jQuery.ajax({
+			        type: "POST",
+			        url: ajaxurl, //url for WP ajax php file, var def added to header in functions.php
+			        data: {
+			            'action': 'get_trailmgmt_data', //server side function
+			            'dbrequest': 'log_visit', //add to the visit table
+			            'platform': navigator.platform, //get OS information
+			            'browser': navigator.userAgent, //the name of the browser
+			            'ncbtuserid': ncbtUserId, //id of the user from the cookie
+			            'lat' : position.coords.latitude, //latitude
+			            'lon' : position.coords.longitude //longitude
+			        },
+					success: function(data, status) {
+						console.log("logging visit: " + data + " : " + status);
+
 			        }
 			    });
 		  	};
@@ -483,8 +502,8 @@ get_header(); ?>
 
 		//refresh species content when clicked
 
-		//what3words key
-		w3w_key = 'JBM1JF04'
+		//what3words load
+		//w3w_key = 'JBM1JF04' //OLD method
 
 
 		//check to see if specific site is passed
@@ -648,45 +667,7 @@ get_header(); ?>
 		    	// loadMouseListeners(); //reload mouseout, mouseover event listeners (hover to display labels)
 		    } 
 
-/*	    	
-		    else if (newZoom>15){
-
-				// ==================================================================
-				//NOT WORKING!!!
-		    	//add what3words grid to map
-		    	// What3words key JBM1JF04
-		    	//retrieve GeoJSON
-				tempbounds = map.getBounds();
-		    	console.log(tempbounds);
-		    	w3wbounds = tempbounds.l.j + ',' + tempbounds.j.j + ',' + tempbounds.l.l + ',' + tempbounds.j.l;
-		    	console.log(encodeURI(w3wbounds));
-
-		    	//TESTING COORDS
-		    	//w3wbounds = '35.548841081608884,-79.29510151210934,36.11665367734053,-78.04540668789059'
-
-		    	//w3wgriduri='https://api.what3words/com/v2/grid?bbox=' + map.getBounds() + '&format=geojson&key=' + w3w_key //PRODUCTION
-		    	w3wgriduri=encodeURI('https://api.what3words.com/v2/grid?bbox=' + w3wbounds + '&callback=jsonp&format=geojson&key=' + w3w_key); //TESTING
-		    	//w3wgriduri = 'https://api.what3words.com/v2/grid?bbox=52.208867,0.117540,52.207988,0.116126&format=json&key=' + w3w_key;
-		    	console.log(w3wgriduri);
-
-		    	w3wgjson = '';
-
-		    	var w3wsettings = {
-			        "async": true,
-			        "crossDomain": true,
-			        "method": "GET",
-			        "url": w3wgriduri, //url for what3words api, with dimensions of the current map
-			        "headers": {}
-			    };
-			    
-			    jQuery.ajax(w3wsettings).done(function(response){
-			    	console.log(jsonp);
-			    	console.log(response);
-			    	map.data.loadGeoJson(response);
-
-			    });	
-		    }
-	*/	    	
+    	
 	    	currZoom = newZoom;
 
 		});
@@ -735,28 +716,39 @@ get_header(); ?>
 		// PLACE MARKERS, DEFINE MARKER BEHAVIOR
 		//retrieve data to load markers and popup labels for each site
 				// ajax call to load markers
+		console.log('getting ready to place markers');
 	    jQuery.ajax({
 	        type: "POST",
 	        dataType: "json",
 	        url: ajaxurl, //url for WP ajax php file, var def added to header in functions.php
 	        data: {
-	            'action': 'get_ncbt_data', //server side function
-	            // 'dbrequest': 'site_detail', //request type
-	            'dbrequest': 'site_markers' //TESTING
+	            //'action': 'get_ncbt_data', //server side function - retrieves from separate database
+	            'action': 'get_trailmgmt_data', //server side function - retrieves from trailmangement plugin table
+	            //'dbrequest': 'site_markers' //WORKING - retrieves from separate database
+	            'dbrequest': 'site_list' //WORKING - retrieves from trailmanagement plugin table
+
 	        },
 	        success: function(data, status) {
 	        	//place code here to deal with database results
-	            // console.log(status);
-	            //console.log(data);
-
+	            /* TESTING
+	            console.log(status);
+	            console.log(data);
+				*/	
 
 	            jQuery.each(data,function(index, value) {
 	            	//setup variables for each site
+/* OLD code for external db...
 	            	var slug = this.SITESLUG;
 	            	var lat = parseFloat(this.LAT);
 	            	var lon = parseFloat(this.LON);
 	            	var title = this.TITLE;
+*/
+	            	var slug = this.siteslug;
+	            	var lat = parseFloat(this.lat);
+	            	var lon = parseFloat(this.lon);
+	            	var title = this.title;
 	            	siteIds.push(slug);
+	            	//console.log(slug + " : " + lat + " : " + lon + " : " + title); //TESTING
 
 					//create infobox/infowindow, add content
 					var popupContent = document.createElement('div',{id:'pop-' + slug ,text: title });
