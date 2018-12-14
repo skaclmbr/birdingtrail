@@ -95,13 +95,15 @@ function pluginname_ajaxurl() {
 	<?php
 }
 
+//=========================================================================
+//THIS SHOULD BECOME OBSOLETE EVENTUALLY - USE ONLY TRAILMGMT PLUGIN TABLES
+
+/*
 //Retrieves site data from database
 add_action( 'wp_ajax_get_ncbt_data', 'get_ncbt_data' );
 add_action( 'wp_ajax_nopriv_get_ncbt_data', 'get_ncbt_data' );
 
 function get_ncbt_data() {
-	//=========================================================================
-	//THIS SHOULD BECOME OBSOLETE EVENTUALLY - USE ONLY TRAILMGMT PLUGIN TABLES
 
 	if(!isset($_POST['dbrequest'])) {
 		echo json_encode(array('ncbt_data_success'=>'response_missing'));
@@ -197,13 +199,6 @@ function get_ncbt_data() {
 
 
 				//loop through results, build JSON object
-/*				$rows = array();
-				if ($result->num_rows >0 ){
-					while($r = $result->fetch_assoc()) {
-						$rows[] = $r;
-					}
-				}
-*/
 				// echo $siteslug;
 				echo json_encode($result->fetch_assoc()); //return results - NO RECORD RESTRICTION!
 							
@@ -276,6 +271,8 @@ function get_ncbt_data() {
 
 	}
 }
+*/
+
 // ======================================================================================
 // add customization for theme
 
