@@ -30,14 +30,17 @@
         - fullpost (excerpt with photo, link to full blog post) - card
     -->
     <a href="<?php the_permalink(); ?>">
-      <div class="card bg-secondary text-white mb-3">
-      <!--<img slass="card-img-top" src="" alt=""> -->
-      <?php if ( has_post_thumbnail() ) : the_post_thumbnail('jumbo-thumb',['class' => 'card-img-top']); endif;?><!--put thumbnail here-->
-      <div class="card-body"> 
-        <h5 class="card-title"><?php the_title(); ?></h5>
-        <p class="card-text"><?php the_excerpt(); ?></p>
-      </div>
-    </div>        
+<!--       <div class="col-lg-4 col-sm-6 mb-4"> -->
+<!--         <div class="card bg-secondary text-white"> -->
+        <div class="card bg-secondary text-white mb-3">
+          <!--<img slass="card-img-top" src="" alt=""> -->
+            <h5 class="card-title"><?php the_title(); ?></h5>
+          <?php if ( has_post_thumbnail() ) : the_post_thumbnail('jumbo-thumb',['class' => 'card-img-top']); endif;?><!--put thumbnail here-->
+          <div class="card-body"> 
+            <p class="card-text"><?php the_excerpt(); ?></p>
+          </div>
+        </div>        
+<!--       </div> -->
     </a>
 
     <?php endwhile; ?>

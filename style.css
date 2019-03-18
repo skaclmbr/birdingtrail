@@ -314,6 +314,10 @@ h1, h2, h3, h4, h5, h6 {
   bottom:0px;
   left:0px;
 }
+
+.card-title {
+  padding:0 1rem 0 1rem;
+}
 /*.featured-img {
 
   border-radius:0 0 3px 3px;

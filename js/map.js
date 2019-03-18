@@ -169,15 +169,53 @@ function populateInfoPanel() {
 
     */
 
+    //===========================================================================
+    //DEFINE google lat long for W3W and Google Place info
+    var siteLatLng = new google.maps.LatLng(site_data['lat'],site_data['lon']);
+    console.log(siteLatLng.lat());
+    console.log(siteLatLng.lng());
+
+    //===========================================================================
+    //WHAT3WORDS EVAL (is it in the db?)
+    console.log('about to get w3w address...');
+    siteW3wWords = site_data['what3words']
+    if (siteW3wWords && siteW3wWords.length>0) {
+      console.log("W3W found in db")
+      populateW3wAddress(siteW3wWords);
+    } else {
+      //database field is empty, lookup and populate
+      console.log('W3W database field is empty, lookup and populate');
+      //getW3WAddress(siteLatLng);
+      var w3w_options = {
+        key:'JBM1JF04',
+        lang:'en'
+      };
+
+      w3w = new W3W.Geocoder(w3w_options);
+      var callback = {
+          onSuccess: function(data) {
+              console.log(JSON.stringify(data));
+              populateW3wAddress(data.words);
+              updateSiteInfo(site_data['siteslug'],'what3words',data.words);
+          },
+          onFailure: function(data) {
+              console.log(JSON.stringify(data));
+          }
+      };
+
+      var params = {
+          coords: [siteLatLng.lat(), siteLatLng.lng()]
+      };
+
+      w3w.reverse(params, callback);
+    }
+
     /* ========================================================================================
     * RETRIEVE GOOGLE DATA
     */
 
     // RETRIEVE GOOGLE PLACE ID
     //Find Place ID for Google information
-    var siteLatLng = new google.maps.LatLng(site_data['lat'],site_data['lon']);
-    console.log(siteLatLng.lng());
-    console.log(siteLatLng.lng());
 
     sitePlaceId = site_data['placeid']; //check to see if google place ID in database
     // console.log("site place ID to pass: " + sitePlaceId);
@@ -209,11 +247,11 @@ function populateInfoPanel() {
     This function calcluates the distance and travel time from the gmaps Directions Matrix
     https://developers.google.com/maps/documentation/javascript/distancematrix
     */
-    console.log("looking for google distance info. Current position:");
-    console.log(currLatLng.lat());
-    console.log(currLatLng.lng());
 
     if (currLatLng){ //only do this if geolocation worked!
+        console.log("looking for google distance info. Current position:");
+        console.log(currLatLng.lat());
+        console.log(currLatLng.lng());
         console.log("current position = true");
         var distService = new google.maps.DistanceMatrixService();
         var response = distService.getDistanceMatrix(
@@ -252,40 +290,6 @@ function populateInfoPanel() {
 
     }
 
-    //===========================================================================
-    //WHAT3WORDS EVAL (is it in the db?)
-    //console.log('about to get w3w address...');
-    siteW3wWords = site_data['what3words']
-    if (siteW3wWords && siteW3wWords.length>0) {
-      console.log("W3W found in db")
-      populateW3wAddress(siteW3wWords);
-    } else {
-      //database field is empty, lookup and populate
-      console.log('W3W database field is empty, lookup and populate');
-      //getW3WAddress(siteLatLng);
-      var w3w_options = {
-        key:'JBM1JF04',
-        lang:'en'
-      };
-
-      w3w = new W3W.Geocoder(w3w_options);
-      var callback = {
-          onSuccess: function(data) {
-              console.log(JSON.stringify(data));
-              populateW3wAddress(data.words);
-              updateSiteInfo(site_data['siteslug'],'what3words',data.words);
-          },
-          onFailure: function(data) {
-              console.log(JSON.stringify(data));
-          }
-      };
-
-      var params = {
-          coords: [siteLatLng.lat(), siteLatLng.lng()]
-      };
-
-      w3w.reverse(params, callback);
-    }
 
 
 } //end populateInfoPanel
