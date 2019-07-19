@@ -15,12 +15,7 @@
 
 /* =================================================================
 * THINGS TO DO
-* adjust zoom level to display size
-* x adjust infowindow behavior based on mobile vs. not (or screen size?) - done based on zoom level
-* create buttons for zoom to state, zoom to location - overlay on gmap
 * create buttons at top to toggle bfb, ebird observations?
-* FORMATTING - MAKE NAV, MAP, FOOT FIT SCREEN EXACTLY, NO SCROLLING!
-
 */
 
 
@@ -104,8 +99,7 @@ get_header(); ?>
           <div id="TRAVELINFO" class="modal-footer-row"></div>
           <div id="nav-web-div" class="modal-footer-row"></div>
          <!--  <div class="col-md modal-footer-footer">
-			  <div id="twitter-button" class="footer-footer-buttons"> <a id="twitter-share" href="" target="_blank"><i class="fa fa-twitter-square"></i></a></div>
-			  
+		  
 			  POTENTIAL SOCIAL MEDIA LINKS TO ADD
 			  <div id="facebook-button" class="footer-footer-buttons"> <a id="facebook-share" href="" target="_blank"><i class="fa fa-facebook-square"></i></a></div>
 			  <div id="insta-button" class="footer-footer-buttons"> <a id="insta-share" href="" target="_blank"><i class="fa fa-instagram"></i></a></div>
@@ -130,8 +124,6 @@ get_header(); ?>
 		<select id="map-site-search-input" placeholder="search">
 			<option value="" disabled selected>search</option>
 		</select>
-<!-- 		<input id="map-site-search-input" type="search" list="map-site-search-list" placeholder="search">
-		<datalist id="map-site-search-list"></datalist> -->
 	</div>
 	</div>
 </main>
@@ -215,20 +207,6 @@ get_header(); ?>
 			    //Post location data to Visit Table
 			    //COULD ADD CODE TO PARSE navigator.userAgent and deterimine if mobile or not, other factors jermain to location
 			    console.log("logging visit location");
-/*
-			    data = jQuery.ajax({
-			        type: "POST",
-			        url: ajaxurl, //url for WP ajax php file, var def added to header in functions.php
-			        data: {
-			            'action': 'get_ncbt_data', //server side function
-			            'dbrequest': 'log_visit', //add to the visit table
-			            'platform': navigator.platform, //get OS information
-			            'browser': navigator.userAgent, //the name of the browser
-			            'ncbtuserid': ncbtUserId, //id of the user from the cookie
-			            'lat' : position.coords.latitude, //latitude
-			            'lon' : position.coords.longitude //longitude
-			        },
-*/
 
 				//trailmgmt plugin version
 			    data = jQuery.ajax({
@@ -263,10 +241,6 @@ get_header(); ?>
 	function setMapHeight() {
 		setTimeout(function(){
 			 //determine header, footer heights
-/*			 hHeight = parseInt(jQuery(".masthead").css("height"));
-			 fHeight = parseInt(jQuery(".mastfoot").css("height"));
-			 sHeight = parseInt(jQUery("#map-site-search").css("height"));
-			 fhsHeight = fHeight+hHeight+sHeight;*/
 			 bHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0); //maximum dimensions for window
 
 			 hoHeight = parseInt(jQuery(".masthead").outerHeight(true));
@@ -284,7 +258,7 @@ get_header(); ?>
 
 
 	function showBirds() {
-		//this function adds recent eBird records to the map
+		//this function adds recent eBird records to the map - currently not used
 		console.log('show birds!');
 
 		//ADD CODE HERE - to check the status of the button (class active) - toggle on/off markers
@@ -335,12 +309,7 @@ get_header(); ?>
 					birdMarkers[birdId] = new google.maps.Marker({position:{lat:lat, lng:lng},icon:birdIcon,map:map});
 					// google.maps.event.addListener(birdMarkers[birdId], "click", function() {}); //do something on click?
 
-		/*			//turns on hover behavior (highlight dot, make label visible) - desktop only
-				siteMouseoverListeners[slug] = google.maps.event.addListener(siteMarkers[slug], "mouseover", function() {siteMarkers[slug].setIcon(highlightIcon); sitePopups[slug].setMap(map); });
-
-				//turns off hover behavior (un-highlight dot, hide label) - desktop only
-				siteMouseoutListeners[slug] = google.maps.event.addListener(siteMarkers[slug], "mouseout", function() {siteMarkers[slug].setIcon(siteIcon); sitePopups[slug].setMap(null);});
-	*/		    
+    
 				});
 			});
   		} //end else
@@ -496,6 +465,7 @@ get_header(); ?>
 	function zoomSite(site, marker) {
 
 	    // ==========================================================================
+	    // Zooms map to site, opens the modal for that site
 	    // If site slug passed in URI, zoom to the site, display modal with info
     	
 	    //first, make sure the site variable passed is valid!
@@ -512,10 +482,6 @@ get_header(); ?>
 	jQuery(document).ready(function(){
 
 		//refresh species content when clicked
-
-		//what3words load
-		//w3w_key = 'JBM1JF04' //OLD method
-
 
 		//check to see if specific site is passed
 		var siteVar = "<?php echo get_query_var( 'site',0 ) ?>"
@@ -621,12 +587,6 @@ get_header(); ?>
 	    	zoomSite(siteSlug, siteMarkers[siteSlug]);
 	    });
 
-	    //manage search box behavior
-/*	    jQuery("#map-site-search-input").click(function(){
-	    	jQuery(this).next().show();
-	    	jQuery(this).next().hide();
-	    });
-*/
 
 		// ================================================================
 		// DEFINE THE GOOGLE MAP
@@ -688,7 +648,6 @@ get_header(); ?>
 		    	showLabels(sitePopups); //turn all labels on, remove hover events
 		    } else if (newZoom < zoomDisplayLabels && currZoom >=zoomDisplayLabels ) { //zoomed out, crossed label zoom threshold
 		    	removeLabels(); // turn all labels off
-		    	// loadMouseListeners(); //reload mouseout, mouseover event listeners (hover to display labels)
 		    } 
 
     	
@@ -696,15 +655,9 @@ get_header(); ?>
 
 
 		});
-/*
-		function loadW3W(gj){
-	    	map.data.loadGeoJson(gj);
 
-		};
-*/
 		function showLabels(sIW) {
 		    //loop through passed infowindows array, TURN ALL LABELS ON, remove event listeners
-		    // console.log('showLabels run');
 		    for (l in sIW) {
 		        sitePopups[ l ].setMap(map);
 
@@ -747,34 +700,20 @@ get_header(); ?>
 	        dataType: "json",
 	        url: ajaxurl, //url for WP ajax php file, var def added to header in functions.php
 	        data: {
-	            //'action': 'get_ncbt_data', //server side function - retrieves from separate database
 	            'action': 'get_trailmgmt_data', //server side function - retrieves from trailmangement plugin table
-	            //'dbrequest': 'site_markers' //WORKING - retrieves from separate database
 	            'dbrequest': 'site_list' //WORKING - retrieves from trailmanagement plugin table
 
 	        },
 	        success: function(data, status) {
 	        	//place code here to deal with database results
-	            /* TESTING
-	            console.log(status);
-	            console.log(data);
-				*/	
-				//var siteSearchVals = {};
 				var siteSearchVals=[];
 	            jQuery.each(data,function(index, value) {
 	            	//setup variables for each site
-/* OLD code for external db...
-	            	var slug = this.SITESLUG;
-	            	var lat = parseFloat(this.LAT);
-	            	var lon = parseFloat(this.LON);
-	            	var title = this.TITLE;
-*/
 	            	var slug = this.siteslug;
 	            	var lat = parseFloat(this.lat);
 	            	var lon = parseFloat(this.lon);
 	            	var title = this.title;
 	            	siteIds.push(slug);
-	            	//console.log(slug + " : " + lat + " : " + lon + " : " + title); //TESTING
 
 					//create infobox/infowindow, add content
 					var popupContent = document.createElement('div',{id:'pop-' + slug ,text: title });
@@ -793,10 +732,8 @@ get_header(); ?>
 					//turns off hover behavior (un-highlight dot, hide label) - desktop only
 					siteMouseoutListeners[slug] = google.maps.event.addListener(siteMarkers[slug], "mouseout", function() {siteMarkers[slug].setIcon(siteIcon); sitePopups[slug].setMap(null);});
 
-					//siteSearchVals[slug] = title;
-					//siteSearchVals.push( title);
+					//populate search select
 					jQuery("<option value='" + slug + "'>" + title + "</option>").appendTo("#map-site-search-input");
-					//jQuery("<option value='" + slug + "'>" + title + "</option>").appendTo("#map-site-search-list");
 
 	            });
 	            // If site variable in URI, zoom in to site and display modal
