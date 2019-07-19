@@ -1,4 +1,5 @@
 <?php 
+ini_set( 'mysql.trace_mode', 0); //this mode must be disabled so that blog pagination works
 
 function wpbootstrap_scripts_with_jquery()
 {
@@ -281,11 +282,13 @@ function get_ncbt_data() {
 if (function_exists( 'add_theme_support')) {
 	add_theme_support('post-thumbnails');
 
-	set_post_thumbnail_size(120,9999,true);
+	//set_post_thumbnail_size(480, 340 ,true); //4:3 ratio, crop mode
+	set_post_thumbnail_size(604, 340); //16:9 ratio
 
 	//additional image sizes
 	//add_image_size('jumbo-thumb', 300, 9999, true); //blog front page image
-	add_image_size('jumbo-thumb', 480, 340, true); //blog front page image
+	//add_image_size('jumbo-thumb', 480, 340, true); //blog front page image, crop mode
+	add_image_size('jumbo_thumb', 604, 340,array('center','center')); //blog front page image
 
 }
 

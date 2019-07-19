@@ -65,6 +65,7 @@ function triggerInfoPanel(slug){
           site_data = data; //populate global variable
           populateInfoPanel(); //commented out for testing
           // populateInfoPanel(data); //commented out for testing
+
           }, 
         error: function(jqxhr, status, exception) {
 

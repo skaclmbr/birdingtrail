@@ -12,9 +12,9 @@ License URI: http://creativecommons.org/licenses/by-sa/3.0/
 
 This simple theme was built using the example Bootstrap theme "Basic marketing site" found on the Bootstrap web site http://twitter.github.com/bootstrap/examples/hero.html
 
+Also uses the cover template found on the Bootstrap site https://getbootstrap.com/docs/4.3/examples/cover/
+
 */
-
-
 
 /* =====================================================
  * Globals
@@ -24,17 +24,17 @@ This simple theme was built using the example Bootstrap theme "Basic marketing s
 a,
 a:focus,
 a:hover {
-  color: #fff;
+  color: #1A2C42;
 }
 
 /* Custom default button */
 .btn-secondary,
 .btn-secondary:hover,
 .btn-secondary:focus {
-  color: #333;
+  color: #1A2C42;
   text-shadow: none; /* Prevent inheritance from `body` */
   background-color: #fff;
-  border: .05rem solid #fff;
+  border: .05rem solid #1A2C42;
 }
 
 .btn-primary,
@@ -45,36 +45,57 @@ a:hover {
   color: #333;
   text-shadow: none; /* Prevent inheritance from `body` */
 
-  background-color: #365c8b;
-  border: .05rem solid #365c8b;
-
+  background-color: #1A2C42;
+  border: .05rem solid #1A2C42;
+  color: #fff;
 }
 
 
 /* =====================================================
  * Base structure
 	reference: iPhone SE 320X568; - minimum dimensions?
-
  */
 
+html{
+  height:100%;
+}
 html,
 body {
-  height: 100%;
-  background-color: #333;
+  background-color: #fff;
+  color: #1A2C42;
 }
+
+/*
+  color: #365c8b;
+alternative 
+  color: #1A2C42;
+*/
 
 body {
 
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: inline;
+  display:flex;
+  flex-direction:column;
+
   justify-content: center;
   -ms-flex-pack: center;
   -webkit-box-pack: center;
-  color: #fff;
-  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
-  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
-  height:100%;
+/*  -webkit-text-size-adjust:100%;*/
+  margin:0;
+  padding:0;
+      -webkit-transform-origin: 0 0;
+    -ms-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
+
+/*container common to all pages, main content between header and footer */
+.content {
+  flex:1 0 auto;
+  order:2;
+}
+
+.header.row,
+.footer.row {
+  padding:0.75rem 0 0.75rem 0;
 }
 
 #page-container {
@@ -84,25 +105,45 @@ body {
 	width:90%;
 }
 
-.map-body{
-	width:100%;
+/*lead label*/
+.lead-label {
+  color:#fff;
 }
 
-/*
-img {
-  max-width:98%;
-  height:auto;
+
+/* for menu */
+
+
+a:hover {
+ color:#333;
 }
-*/
+
+a:visited {
+  color:#666;
+}
+
+.btn a:visited {
+  color:#000;
+}
 img .aligncenter {
   text-align:center;
   margin:auto;
 }
 
 /* =====================================================
- * Header
+ * HEADER
  *  added wp css tags to bootstrap nav links (.menu-item tags) - dunno if this will mess with other menus though!
- */
+*/
+.header {
+  order:1;
+  flex-shrink:0;
+  width:100%;
+}
+
+.header a,
+.header a:visited {
+  color: #1A2C42;
+}
 
 /* temporarily hide header logo */
 img .header_logo {
@@ -112,7 +153,6 @@ img .header_logo {
 .masthead {
   padding-bottom: 0.7rem !important;
   margin-bottom:0 ;
-  /*max-width:100%;*/
   padding-left:1.5rem;
   padding-right:1.5rem;
   justify-content:space-between;
@@ -170,8 +210,6 @@ img .header_logo {
   justify-content:flex-start; /*float left*/
   padding-top:0rem;
   padding-bottom:0rem;
-  pading-left:15px;
-  pading-right:15px;
   width:auto;
 }
 
@@ -200,6 +238,19 @@ img .header_logo {
 }
 
 /* =====================================================
+ * FOOTER
+ *  
+ */
+
+.footer {
+  width:100%;
+  flex-shrink: 0;
+  order:3;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+*/
+/* =====================================================
  * Front Page (also called Cover)
  */
 
@@ -210,7 +261,8 @@ img .header_logo {
 
 .learn-more {
   margin-top:2rem;
-  background:#555;
+/*  background:#555;*/
+  background: #1A2C42;
   padding-top:0.5rem;
   padding-bottom:0.5rem;
   margin-bottom:1rem;
@@ -235,7 +287,7 @@ img .header_logo {
 }
 .lead {
   text-align:center;
-
+  font-weight:350;
 }
 .center-block {
   text-align:center;
@@ -253,10 +305,12 @@ img .header_logo {
 
 .fp-topic {
   margin:0 0.5rem;
-  color:#a2a573;
+/*  color:#a2a573;*/
+  color:#fff;
 }
 .fp-topic-icon {
-  color: #a2a573;
+/*  color: #a2a573;*/
+  color: #fff;
 }
 
 /* =====================================================
@@ -276,22 +330,71 @@ img .header_logo {
 }
 .sidebar li a {
 }
+/* =====================================================
+ * PAGE
+ */
+.page-title {
+  text-align: Center;
+}
 
 /* =====================================================
- * blog
+ * BLOG
  */
+
+/* remove hyperlink formatting on cards */
+.card a,
+.card a:hover,
+.card a:visited {
+  color:unset;
+}
+
+.card-title {
+  padding-left:0.5rem;
+  font-weight:700;
+  font-size:1.2rem;
+  padding: 0rem 0.5rem 0rem 0.5rem;
+  margin: 0rem;
+}
+
+.card-white {
+  background: #fff;
+  color: #1A2C42;
+  border-radius:5px;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  display:inline-block;
+  box-shadow: 0 4px 8px 0 rgba(26,44,66,0.2), 0 6px 20px 0 rgba(26,44,66,0.19);
+}
+
+/* Alternative?
+.card-blue {
+  background: #1A2C42;
+  color:#fff;
+  border:.05rem solid #fff;
+  border-radius:5px;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+}
+*/
 
 .post-main {
   margin-left:0;
   margin-right:0;
 }
 
-/*
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+.blog-nav {
+  height:1.5rem;
+  width:100%;
+  text-align:center;
+  margin-top:0.5rem;
+  margin-bottom:1rem;
 }
-*/
 
+.blog-card-category {
+  font-size:0.6rem;
+  padding:0.5rem;
+  color:#aaa;
+}
 
 .display-4 {
   font-size: 2.5rem;
@@ -315,17 +418,7 @@ h1, h2, h3, h4, h5, h6 {
   left:0px;
 }
 
-.card-title {
-  padding:0 1rem 0 1rem;
-}
-/*.featured-img {
 
-  border-radius:0 0 3px 3px;
-  position:absolute;
-  top:0px;
-  left:0px;
-}
-*/
 /* Bootstrap md breakpo - shifts from image below to image beside */
 @media (min-width:768px) {
   .display-4 {
@@ -441,6 +534,14 @@ h1, h2, h3, h4, h5, h6 {
   margin-left:auto;
 }
 
+.blog-card {
+  padding-top:1.5rem;
+  padding-bottom:1.5rem;
+}
+
+.btn-center {
+  text-align: center;
+}
 
 img.centered {
 display: block;
@@ -479,33 +580,33 @@ display: inline;
 }
 
 /* Bootstrap md breakpoint - makes all images full width */
+/*
 @media (max-width:768px) {
   img.alignright,
   img.alignleft {
     float:none;
   }
 }
-/* =====================================================
- * Page
- */
-.page-title {
-  text-align: Center;
-}
+*/
 
-/* =====================================================
- * Blog Category Page
- *	
- */
 
+/*used on category and blog pages */
 .card-columns {
-  margin-left:auto
+  margin-left:auto;
   margin-right:auto;
   margin: 0rem 1rem;
+}
+
+.card-columns a,
+.card-columns a:hover,
+.card-columns a:visited {
+  text-decoration:none;
 }
 
 /* =====================================================
  * Banner Pages
  */
+
  .banner-page-subtitle {
   font-family:'Pacifico',cursive;
   font-style:italic;
@@ -560,17 +661,17 @@ display: inline;
 }
 
 /* =====================================================
- * Map
+ * MAP
  */
  
 .map-body {
   width:100%;
-  height:100%;
   top:0rem;
   right:0rem;
   bottom:0rem;
   left:0rem;
   display:block;
+  flex:1 0 auto;
  }
 
 #map-container {
@@ -599,7 +700,31 @@ display: inline;
 
 #map-button-group i {
   font-size:1rem;
-  color:#666;
+ /* color:#666;*/
+ color:#1A2C42;
+}
+
+#map-site-search {
+  width:100%;
+}
+
+#map-site-search-input {
+  border:none;
+  font:unset;
+  font-size:0.8rem;
+  width:80%;
+  text-align-last:center;
+}
+
+#map-site-search-box {
+/*  border: 1px solid #1A2C42;*/
+  border:none;
+  display:inline-block;
+}
+
+.fa-search {
+  padding:0 0.5rem;
+  border: 1 solid #ccc;
 }
 /*
 .infoBox {
@@ -638,7 +763,7 @@ display: inline;
   border-radius:5px;
   -moz-border-radius:5px;
   -webkit-border-radius:5px;
-  background:#517098;
+  background:#1A2C42;
   color:#ffffff;
   padding:5.5px;
   color:white;
@@ -659,7 +784,24 @@ display: inline;
 
 /* controls site detail popup background color */
 .modal-content {
-  background:#333;
+  background:#1A2C42;
+  color:#fff;
+}
+
+#DESCRIPTION {
+  text-align:left;
+}
+
+.bird-sighting a,
+.bird-sighting a:hover,
+.bird-sighting a:visited {
+  color:#fff;
+}
+
+#w3w-info a,
+#w3w-info a:hover,
+#w3w-info a:visited {
+  color:#fff;
 }
 
 /* controls x color on site detail popup */
@@ -685,13 +827,10 @@ button.close {
   margin-left:0rem;
 }
 .foreground-fa {
-  color: #517098;
+  color: #1A2C42;
 }
 
-/* controls card color */
-.card {
-  background: #365c8b;
-}
+
 
 /* controls feature badges */
 
@@ -704,9 +843,6 @@ button.close {
   margin-left:0rem;
   margin-right:0.5rem;
   display:inline;
-  border-radius:5px;
-  -moz-border-radius:5px;
-  -webkit-border-radius:5px;
 }
 
 .f-hide {
@@ -715,7 +851,6 @@ button.close {
 
 
 /* keep these in front of image */
-
 #modal-header-image {
   width:100%;
   position:absolute;
@@ -787,7 +922,7 @@ button.close {
 }
 
 .modal-footer-row {
-  margin:0 1rem !important;
+  margin:0.3rem 1rem !important;
   width:100%;
 }
 

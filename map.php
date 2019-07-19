@@ -38,7 +38,7 @@ get_header(); ?>
 		- data populated via map.js code
 
 -->
-<main id="map-modal-container" role="main" class="inner map">
+<main id="map-modal-container" role="main" class="content inner map">
   <!-- The Modal -->
   <div class="modal fade" id="infoPanel">
     <div class="modal-dialog modal-dialog-centered"  >
@@ -103,15 +103,15 @@ get_header(); ?>
         <div id="modal-footer" class="row modal-footer">
           <div id="TRAVELINFO" class="modal-footer-row"></div>
           <div id="nav-web-div" class="modal-footer-row"></div>
-          <div class="col-md modal-footer-footer">
+         <!--  <div class="col-md modal-footer-footer">
 			  <div id="twitter-button" class="footer-footer-buttons"> <a id="twitter-share" href="" target="_blank"><i class="fa fa-twitter-square"></i></a></div>
 			  
-			  <!-- POTENTIAL SOCIAL MEDIA LINKS TO ADD
+			  POTENTIAL SOCIAL MEDIA LINKS TO ADD
 			  <div id="facebook-button" class="footer-footer-buttons"> <a id="facebook-share" href="" target="_blank"><i class="fa fa-facebook-square"></i></a></div>
 			  <div id="insta-button" class="footer-footer-buttons"> <a id="insta-share" href="" target="_blank"><i class="fa fa-instagram"></i></a></div>
-			   -->
+			  
 
-	      </div>
+	      </div> -->
 	      <div id="w3w-info" class="modal-footer-row w3w vcenter">
 			<a href="https://www.what3words.com" id="w3w-link" target="_blank"><img src="<?php  echo get_template_directory_uri()  . '/img/w3w.svg';?>" id="w3w" class="w3w-img" alt="What3Words"/><span id="w3w-address"></span></a>
 		  </div>
@@ -124,6 +124,15 @@ get_header(); ?>
 	<div id="map-container" class="row">
 		<!--google map canvas -->
   		<div id="map_canvas" class="col-md-12"></div>
+	</div>
+	<div id="map-site-search">
+		<div id="map-site-search-box">
+		<select id="map-site-search-input" placeholder="search">
+			<option value="" disabled selected>search</option>
+		</select>
+<!-- 		<input id="map-site-search-input" type="search" list="map-site-search-list" placeholder="search">
+		<datalist id="map-site-search-list"></datalist> -->
+	</div>
 	</div>
 </main>
       
@@ -254,19 +263,21 @@ get_header(); ?>
 	function setMapHeight() {
 		setTimeout(function(){
 			 //determine header, footer heights
-			 hHeight = parseInt(jQuery(".masthead").css("height"));
+/*			 hHeight = parseInt(jQuery(".masthead").css("height"));
 			 fHeight = parseInt(jQuery(".mastfoot").css("height"));
-			 fhHeight = fHeight+hHeight;
+			 sHeight = parseInt(jQUery("#map-site-search").css("height"));
+			 fhsHeight = fHeight+hHeight+sHeight;*/
 			 bHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0); //maximum dimensions for window
 
 			 hoHeight = parseInt(jQuery(".masthead").outerHeight(true));
 			 foHeight = parseInt(jQuery(".mastfoot").outerHeight(true));
-			 fhoHeight = hoHeight + foHeight;
+			 soHeight = parseInt(jQuery("#map-site-search").outerHeight(true));
+			 fhsoHeight = hoHeight + foHeight + soHeight;
 			 
-			 mHeight = bHeight - fhoHeight - 5;
+			 mHeight = bHeight - fhsoHeight - 5;
 
 			 jQuery("#map_canvas").css("height",mHeight); //set map canvas to new dimensions (window - footer + header);
-			 jQuery("#map-modal-container").css("height",mHeight); //set map canvas to new dimensions (window - footer + header);
+			 jQuery("#map-modal-container").css("height",mHeight+soHeight); //set map canvas to new dimensions (window - footer + header);
 
 		}, 0);
 	} //end setMapHeight
@@ -352,12 +363,12 @@ get_header(); ?>
 
 		// Set CSS for the control interior
 		var centerButton = document.createElement('button');
-		centerButton.className = 'btn btn-light';
+		centerButton.className = 'btn btn-secondary';
 		centerButton.innerHTML = "<i class='fa fa-crosshairs'></i>";
 		controlUI.appendChild(centerButton);
 
 		var stateButton = document.createElement('button');
-		stateButton.className = 'btn btn-light';
+		stateButton.className = 'btn btn-secondary';
 		stateButton.innerHTML = "<i class='fa fa-search-minus'></i>";
 		controlUI.appendChild(stateButton);
 
@@ -523,7 +534,7 @@ get_header(); ?>
 		var pointOffset = new google.maps.Point(13,13)
 		siteIcon = {
 			path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
-			fillColor: '#365c8b',
+			fillColor: '#1A2C42',
 			fillOpacity: .8,
 			strokeWeight: 0,
 			scale:0.25
@@ -603,6 +614,19 @@ get_header(); ?>
 
 	    });
 
+	    //listen for when an item is slected in the search box
+	    jQuery("#map-site-search-input").change(function(){
+	    	siteSlug = jQuery("#map-site-search-input").val();
+	    	jQuery("#map-site-search-input").val("");
+	    	zoomSite(siteSlug, siteMarkers[siteSlug]);
+	    });
+
+	    //manage search box behavior
+/*	    jQuery("#map-site-search-input").click(function(){
+	    	jQuery(this).next().show();
+	    	jQuery(this).next().hide();
+	    });
+*/
 
 		// ================================================================
 		// DEFINE THE GOOGLE MAP
@@ -649,7 +673,7 @@ get_header(); ?>
 
 		// ================================================================
  		// run function to set map height on page load
-		setMapHeight();
+		setMapHeight(); //TESTING flexbox method...
 
 		// ==================================================================
 		// ZOOM Sensitive labeling
@@ -669,6 +693,7 @@ get_header(); ?>
 
     	
 	    	currZoom = newZoom;
+
 
 		});
 /*
@@ -734,7 +759,8 @@ get_header(); ?>
 	            console.log(status);
 	            console.log(data);
 				*/	
-
+				//var siteSearchVals = {};
+				var siteSearchVals=[];
 	            jQuery.each(data,function(index, value) {
 	            	//setup variables for each site
 /* OLD code for external db...
@@ -767,8 +793,12 @@ get_header(); ?>
 					//turns off hover behavior (un-highlight dot, hide label) - desktop only
 					siteMouseoutListeners[slug] = google.maps.event.addListener(siteMarkers[slug], "mouseout", function() {siteMarkers[slug].setIcon(siteIcon); sitePopups[slug].setMap(null);});
 
-	            });
+					//siteSearchVals[slug] = title;
+					//siteSearchVals.push( title);
+					jQuery("<option value='" + slug + "'>" + title + "</option>").appendTo("#map-site-search-input");
+					//jQuery("<option value='" + slug + "'>" + title + "</option>").appendTo("#map-site-search-list");
 
+	            });
 	            // If site variable in URI, zoom in to site and display modal
 	            // first, make sure there is a valid marker for the passed variable!
 	            if (siteMarkers[siteVar]) {zoomSite(siteVar, siteMarkers[siteVar]);};

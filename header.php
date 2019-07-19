@@ -2,9 +2,9 @@
 <html <?php language_attributes(); ?>>
   <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no" >
+    <meta name="description" content="The home of the North Carolina Birding Trail, a resource for bird enthusiasts of all levels.">
+    <meta name="author" content="North Carolina Birding Trail">
     <link rel="icon" href="../../../../favicon.ico">
 
     <?php wp_head(); ?>
@@ -12,7 +12,7 @@
 
   <body <?php body_class(); ?>>
 
-  <div class="container-fluid mx-auto"> <!-- header container -->
+  <div class="header container-fluid mx-auto"> <!-- header container -->
       <div class = "row masthead"> <!-- row container -->
         <div class="masthead-brand col-xs-6"> <!-- either logo or name, float left or center -->
           <?php

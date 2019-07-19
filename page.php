@@ -10,7 +10,7 @@ get_header();
 ?>
 
 
-<div class="container">
+<div class="container content">
 
 	<div class="row">
 		<div class="page-title col-sm-12">
