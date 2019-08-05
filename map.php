@@ -206,7 +206,7 @@ get_header(); ?>
 		    if (logVisit) { //avoid logging visit if request from clicking map button
 			    //Post location data to Visit Table
 			    //COULD ADD CODE TO PARSE navigator.userAgent and deterimine if mobile or not, other factors jermain to location
-			    console.log("logging visit location");
+			    /*console.log("logging visit location");*/
 
 				//trailmgmt plugin version
 			    data = jQuery.ajax({
@@ -222,7 +222,7 @@ get_header(); ?>
 			            'lon' : position.coords.longitude //longitude
 			        },
 					success: function(data, status) {
-						console.log("logging visit: " + data + " : " + status);
+						/*console.log("logging visit: " + data + " : " + status);*/
 
 			        }
 			    });
@@ -259,7 +259,7 @@ get_header(); ?>
 
 	function showBirds() {
 		//this function adds recent eBird records to the map - currently not used
-		console.log('show birds!');
+		/*console.log('show birds!');*/
 
 		//ADD CODE HERE - to check the status of the button (class active) - toggle on/off markers
 
@@ -283,12 +283,12 @@ get_header(); ?>
 			}
 
 			jQuery.ajax(settings).done(function(r){
-				console.log(r); //TESTING
+				//console.log(r); //TESTING
 			  	//loop through results to place markers
 
 			  	jQuery.each(r, function(index, value){
 			    	//setup variables for each site
-			    	console.log(this);
+			    	//console.log(this);
 			    	var comName = this.comName;
 			    	var sciName = this.sciName;
 			    	var locId = this.locId;
@@ -566,14 +566,14 @@ get_header(); ?>
 	    jQuery("#BIRDS-CARD").click(function(){
 
 	      if (jQuery('#BIRDS').hasClass('show')){
-	        console.log("has show");
+	        //console.log("has show");
 	        //jQuery('#SIGHTINGS').empty();
 	      } else {
-	        console.log("no show");
-	        console.log('modal length: ' + jQuery('.modal-subsection-column-left').length);
+	        //console.log("no show");
+	        //console.log('modal length: ' + jQuery('.modal-subsection-column-left').length);
 	        if (!jQuery('.modal-subsection-column').length ) {
 	          //birds not populated, do it now.
-	          console.log("run populate sightings");
+	          //console.log("run populate sightings");
 	          populateSightings();
 	        }
 	      }
@@ -694,7 +694,7 @@ get_header(); ?>
 		// PLACE MARKERS, DEFINE MARKER BEHAVIOR
 		//retrieve data to load markers and popup labels for each site
 				// ajax call to load markers
-		console.log('getting ready to place markers');
+		//console.log('getting ready to place markers');
 	    jQuery.ajax({
 	        type: "POST",
 	        dataType: "json",

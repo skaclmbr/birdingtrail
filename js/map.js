@@ -44,7 +44,7 @@ function triggerInfoPanel(slug){
     // });
     // console.log(slug);
 
-    console.log('ajax request to get ncbt site data - ' + slug);
+    //console.log('ajax request to get ncbt site data - ' + slug);
     jQuery.ajax({
         type: "POST",
         dataType: "json",
@@ -57,33 +57,20 @@ function triggerInfoPanel(slug){
             'siteslug' : slug //identifying data for the site - for some reason this doesn't work if passed variable is 'siteslug'
         },
         success: function(data, status) {
-          
-          //console.log("infopanel ncbt data ajax success");
-          //console.log(status);
-          //console.log(data);
 
           site_data = data; //populate global variable
           populateInfoPanel(); //commented out for testing
-          // populateInfoPanel(data); //commented out for testing
-
           }, 
         error: function(jqxhr, status, exception) {
 
-          console.log("error retrieving ncbt data ajax call");
-          console.log(status + " : " + exception);
+          //console.log("error retrieving ncbt data ajax call");
+          //console.log(status + " : " + exception);
 
         }
 
         //success: function(data) {ncbtData = data;}
     });
       
-    /*
-    ).then(function() {
-      console.log(ncbtData);
-      populateInfoPanel(ncbtData);
-      };
-    );
-    */
 };
 
 
@@ -99,8 +86,8 @@ function populateInfoPanel() {
     *  POPULATE DATA FROM DATABASE
     */
     //collapse all panels
-    console.log('populating info panel');
-    console.log(site_data);
+    //console.log('populating info panel');
+    //console.log(site_data);
 
     jQuery('.collapse').removeClass('show');
 
@@ -142,7 +129,7 @@ function populateInfoPanel() {
       jQuery("#nav-web-div").append(webLink);
 
     } else {
-      console.log ("no external website");
+      //console.log ("no external website");
     } 
 
 
@@ -173,19 +160,19 @@ function populateInfoPanel() {
     //===========================================================================
     //DEFINE google lat long for W3W and Google Place info
     var siteLatLng = new google.maps.LatLng(site_data['lat'],site_data['lon']);
-    console.log(siteLatLng.lat());
-    console.log(siteLatLng.lng());
+    //console.log(siteLatLng.lat());
+    //console.log(siteLatLng.lng());
 
     //===========================================================================
     //WHAT3WORDS EVAL (is it in the db?)
-    console.log('about to get w3w address...');
+    //console.log('about to get w3w address...');
     siteW3wWords = site_data['what3words']
     if (siteW3wWords && siteW3wWords.length>0) {
-      console.log("W3W found in db")
+      //console.log("W3W found in db")
       populateW3wAddress(siteW3wWords);
     } else {
       //database field is empty, lookup and populate
-      console.log('W3W database field is empty, lookup and populate');
+      //console.log('W3W database field is empty, lookup and populate');
       //getW3WAddress(siteLatLng);
       var w3w_options = {
         key:'JBM1JF04',
@@ -195,12 +182,12 @@ function populateInfoPanel() {
       w3w = new W3W.Geocoder(w3w_options);
       var callback = {
           onSuccess: function(data) {
-              console.log(JSON.stringify(data));
+              //console.log(JSON.stringify(data));
               populateW3wAddress(data.words);
               updateSiteInfo(site_data['siteslug'],'what3words',data.words);
           },
           onFailure: function(data) {
-              console.log(JSON.stringify(data));
+              //console.log(JSON.stringify(data));
           }
       };
 
@@ -250,10 +237,10 @@ function populateInfoPanel() {
     */
 
     if (currLatLng){ //only do this if geolocation worked!
-        console.log("looking for google distance info. Current position:");
-        console.log(currLatLng.lat());
-        console.log(currLatLng.lng());
-        console.log("current position = true");
+        //console.log("looking for google distance info. Current position:");
+        //console.log(currLatLng.lat());
+        //console.log(currLatLng.lng());
+        //console.log("current position = true");
         var distService = new google.maps.DistanceMatrixService();
         var response = distService.getDistanceMatrix(
           {
@@ -271,25 +258,26 @@ function populateInfoPanel() {
               } else {
           var dist = response['rows'][0]['elements'][0]['distance'];
           var dur = response['rows'][0]['elements'][0]['duration'];
-          console.log(status + " : ");
-          console.log(response);
+          //console.log(status + " : ");
+          //console.log(response);
           retDistDur = {'dist':dist['text'],'dur':dur['text']};
           jQuery("#TRAVELINFO").empty().append(retDistDur['dist'] + " away (" + retDistDur['dur'] + ")");
         }
     
         };
 
-        //ADD link to google directions
-        dirUrl = mapsSelector(siteLatLng);
-        navLink = jQuery ('<a/>', {
-          href: dirUrl,
-          id: 'NAVIGATION',
-          class: 'btn btn-outline-light nav-web-buttons',
-          text: 'Navigate'
-        });
-        jQuery("#nav-web-div").append(navLink);
 
     }
+    
+    //ADD link to google directions
+    dirUrl = mapsSelector(siteLatLng);
+    navLink = jQuery ('<a/>', {
+      href: dirUrl,
+      id: 'NAVIGATION',
+      class: 'btn btn-outline-light nav-web-buttons',
+      text: 'Navigate'
+    });
+    jQuery("#nav-web-div").append(navLink);
 
 
 
@@ -408,7 +396,7 @@ https://developers.google.com/maps/documentation/javascript/places#placeid
             updateSiteInfo(slug, 'placeid',results[0].place_id);
             rPID(results[0].place_id);
         } else {
-            console.log("no google placeid found");
+            //console.log("no google placeid found");
             rPID(null);
         }
     
@@ -444,8 +432,8 @@ function populateSightings() {
 */
 // function populateSightings(site_data) {
   //get information from eBird, populate modal with recent sightings
-  console.log('site Data: ');
-  console.log(site_data);
+  //console.log('site Data: ');
+  //console.log(site_data);
   //check to see if location id in database record
   if (!site_data['locid']){
       // console.log("searching for location id");
@@ -470,7 +458,7 @@ function populateSightings() {
   // var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   // var months = ["Jan", "Feb", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-  console.log("https://ebird.org/ws2.0/data/obs/geo/recent/notable?lat=" + site_data['lat'] + "&lng=" + site_data['lon'] + "&dist=" + searchDist);
+  //console.log("https://ebird.org/ws2.0/data/obs/geo/recent/notable?lat=" + site_data['lat'] + "&lng=" + site_data['lon'] + "&dist=" + searchDist);
   var settings = {
     "async": true,
     "crossDomain": true,
@@ -484,7 +472,7 @@ function populateSightings() {
   }
 
   jQuery.ajax(settings).done(function(r){
-    console.log(r); //TESTING
+    //console.log(r); //TESTING
     //make two columns to display bird list
     var birdLeft = jQuery('<div/>', {class:'modal-subsection-column col-6', id:'modal-subsection-column-left'});
     var birdRight = jQuery('<div/>', {class:'modal-subsection-column col-6', id:'modal-subsection-column-right'});
@@ -549,7 +537,7 @@ function isOdd(num){return num %2; }
 
 function getLocID (lat, lng, name) {
   // check ebird for closest location id to site (look for up to 3km away)
-  console.log('searching for eBird Location ID');
+  //console.log('searching for eBird Location ID');
   var settings = {
     "async": true,
     "crossDomain": true,
@@ -577,8 +565,8 @@ function getLocID (lat, lng, name) {
 
     // console.log("matched " + name + " TO " + mName + " : " + mLocId)
     updateSiteInfo(site_data['siteslug'],'locid', mLocId);
-    console.log('locid call:');
-    console.log(response);
+    //console.log('locid call:');
+    //console.log(response);
     return mLocId;
   }); //end eBird ajax request
 } //end getLocID
@@ -694,7 +682,7 @@ function updateSiteInfo(slug, f, d) {
     d = Data to update field to
     FUTURE - enable field array and data array, so that multiple fields can be updated 
     */
-    console.log("updating database for " + slug + " field: " + f + " data: " + d);
+    //console.log("updating database for " + slug + " field: " + f + " data: " + d);
 
     data = jQuery.ajax ({
         type:"POST",
@@ -711,13 +699,13 @@ function updateSiteInfo(slug, f, d) {
             'data' : d //data to insert
         },
         success: function(data, status) {
-            console.log(status);
-            console.log(data);
+            //console.log(status);
+            //console.log(data);
         },
         error: function(jqxhr, status, exception) {
-            console.log(status);
-            console.log(exception);
-            console.log(jqxhr);
+            //console.log(status);
+            //console.log(exception);
+            //console.log(jqxhr);
         }
     });
 } //end updateSiteInfo
@@ -731,7 +719,8 @@ function mapsSelector(gLatLng) {
   //link format - https://www.google.com/maps/dir/22.7683707,-99.4103449/35.6805556,-78.6275/@24.0908076,-102.5559874,6.06z
   // link with just destination location - baseUrl = "://maps.google.com/maps?daddr=" + gLatLng.lat() + "," + gLatLng.lng()+ "&amp;ll=";
 
-  baseUrl = "://maps.google.com/maps/dir/" + gLatLng.lat() + "," + gLatLng.lng()+ "/"+currLatLng.lat()+","+currLatLng.lng()+"/@"+gLatLng.lat() + "," + gLatLng.lng();
+  //baseUrl = "://maps.google.com/maps/dir/" + gLatLng.lat() + "," + gLatLng.lng()+ "/"+currLatLng.lat()+","+currLatLng.lng()+"/@"+gLatLng.lat() + "," + gLatLng.lng();
+  baseUrl = "://maps.google.com/maps?saddr=Current%20Location&daddr=" + gLatLng.lat() + "," + gLatLng.lng() + "&amp;11=";
   //console.log (baseUrl);
   if /* if we're on iOS, open in Apple Maps */
     ((navigator.platform.indexOf("iPhone") != -1) || 
