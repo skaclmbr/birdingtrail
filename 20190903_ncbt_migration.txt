@@ -1,0 +1,13 @@
+#Migration Procedure
+##Info
+Test site: public_html/testncbirdingtrail
+Production site: public_html/ncbirdingtrail
+
+##Procedure
+- Log on to bluehost
+- Domains
+- ncbirdingtrail.org
+- Zone Editor
+- Change the following:
+    + A (Host) Records: Change @ record to 162.241.219.134 from 198.185.159.160
+    + CNAME (Alias) Records: Change www record to 162.241.219.134 from ext5-cust.squarespace.com

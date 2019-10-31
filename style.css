@@ -417,6 +417,16 @@ img .header_logo {
   color:#aaa;
 }
 
+p.blog-post-meta {
+  width:100%;
+  text-align: center;
+}
+
+h3.cover-heading{
+  text-align:center;
+}
+
+
 /* Bootstrap md breakpo - shifts from image below to image beside */
 @media (min-width:768px) {
 /*  .display-4 {

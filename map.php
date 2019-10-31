@@ -480,7 +480,6 @@ get_header(); ?>
 
 
 	jQuery(document).ready(function(){
-
 		//refresh species content when clicked
 
 		//check to see if specific site is passed
@@ -695,6 +694,7 @@ get_header(); ?>
 		//retrieve data to load markers and popup labels for each site
 				// ajax call to load markers
 		//console.log('getting ready to place markers');
+
 	    jQuery.ajax({
 	        type: "POST",
 	        dataType: "json",
