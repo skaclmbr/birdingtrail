@@ -11,11 +11,9 @@ This is a redesign of the North Carolina Birding Trail website (www.ncbirdingtra
   * Fishes for site information using Google Maps Routes and Places API
 
 ### Status
-Under Development
+In Production
 
 ### Future Enhancements
-* Integrate eBird information to guide birders to recently seen species
-* Develop dynamically formatted and printable (pdf?) birding lists based on eBird records
-* Add wordpress data entry forms for managing site data
-* Incorporate site data into wordpress database to eliminate the need for a separate MySQL database
+* Integrate eBird checklist pdf links for each site (example: https://ebird.org/printableList?regionCode=L599964&yr=all&m= )
+* Add wordpress data entry forms for managing site data - see trail management plugin (https://github.com/ncbirdconservation/birdingtrailmanagement)
 * Add login ability for site managers to manage their information
