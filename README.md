@@ -1,7 +1,7 @@
 # birdingtrail
 ## NC Birding Trail Website Redesign
 
-This is a redesign of the North Carolina Birding Trail website (www.ncbirdingtrail.org), developed as a WordPress theme (currently hosted at http://ncbirdingtrail.org). Primarily this will be the new website for the North Carolina, but with potential to be shareable as a theme for other trails using the WordPress platform.
+This is a redesign of the North Carolina Birding Trail website (www.ncbirdingtrail.org), developed as a WordPress theme ([currently hosted here](http://ncbirdingtrail.org)). Primarily this will be the new website for the North Carolina, but with potential to be shareable as a theme for other trails using the WordPress platform.
 
 ### Features
 * Mobile optimized using Bootstrap 4.0
